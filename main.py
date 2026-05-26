@@ -1,10 +1,10 @@
-from model import (Phase1Model)
+from model import (Phase1Model, Phase2Model, Dir)
 from view import View
 from controller import Controller
 import pyxel
 
 if __name__ == '__main__':
-    model = Phase1Model()
+    model = Phase2Model()
     view = View()
 
 

@@ -1,4 +1,4 @@
-from model import Phase1Model
+from model import (Phase1Model, Phase2Model, Dir)
 from view import View
 import pyxel
 
@@ -27,9 +27,9 @@ class Controller:
             model.display_next_enemy()
 
             
-
-            if view.is_gun_clicked():
-                model.shoot()
+            wasd_val = view.is_gun_wasd_clicked(model.allowed_dirs)
+            if wasd_val != None:
+                model.shoot(wasd_val)
 
         model.check_is_game_over()
 

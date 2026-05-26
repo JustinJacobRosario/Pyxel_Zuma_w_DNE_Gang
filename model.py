@@ -2,14 +2,22 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 from random import Random, choice
+import pyxel
 from typing import Protocol
 from enum import Enum, auto
-import pyxel
+
+class Dir(Enum):
+    UP = auto()
+    DOWN = auto()
+    LEFT = auto()
+    RIGHT = auto()
+
 from enemies import Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet, OrangeBullet, RedBullet, BlueBullet
 
 
-class Phase1Model:
+
+class Phase1Model(ABC):
     def __init__(self, width: int = 1080, height: int = 720):
         self._width: int = width
         self._height: int = height
@@ -123,6 +131,9 @@ class Phase1Model:
     def hp(self):
         return self._hp
     
+    @property
+    def allowed_dirs(self):
+        return [Dir.UP]
 
 
     def inc_tick(self):
@@ -164,7 +175,8 @@ class Phase1Model:
         enemy.x = p1[1] + (p2[1] - p1[1]) * percent
 
     def process_shot(self):
-        self._next_color = self.pending_bullets[-1].color.value
+        if self._pending_bullets:
+            self._next_color = self.pending_bullets[-1].color.value
 
 
         for bullet in self._displayed_bullets:
@@ -183,17 +195,56 @@ class Phase1Model:
                     
                     self._exp += 1
 
-    def shoot(self):
+    def shoot(self, dir: Dir):
         if self._pending_bullets:
-            self._displayed_bullets.append(self._pending_bullets.pop())
+            bullet = self._pending_bullets.pop()
+            bullet.direction = dir
+            bullet.x = self._gun_coords[0]
+            bullet.y = self._gun_coords[1]
+            self._displayed_bullets.append(bullet)
 
     def move_bullet(self):
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
-                bullet.y -= 0.2
 
-                if bullet.y < -1:
+                bullet.y -= 0.2
+                if self._dimensions[1] < bullet.y < -1:
                     bullet.is_used = True
 
 
 
+class Phase2Model(Phase1Model):
+    def __init__(self):
+        super().__init__()
+        self._path = [
+            (5, 0), (5, 1), (5, 2), (5, 3), (5, 4), (5, 5), (5, 6), (5, 7), (5, 8), (5, 9), (5, 10), (5, 11), (5, 12), (5, 13),
+            (4, 13), (3, 13), (3, 12), (3, 11), (3, 10), (3, 9), (3, 8), (3, 7), (3, 6), (3, 5), (3, 4), (3, 3), (3, 2), (3, 1),
+            (2, 1), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14)]
+        self._gun_coords = (7, 4)
+
+    @property
+    def allowed_dirs(self):
+        return [Dir.UP, Dir.DOWN, Dir.LEFT, Dir.RIGHT]
+
+    def move_bullet(self):
+
+        for bullet in self._displayed_bullets:
+            if not bullet.is_used:
+
+                match bullet.direction:
+                    case Dir.UP:
+                        bullet.y -= 0.2
+                        if bullet.y < -1:
+                            bullet.is_used = True
+                    case Dir.DOWN:
+                        bullet.y += 0.2
+                        if self._height < bullet.y:
+                            bullet.is_used = True
+                    case Dir.LEFT:
+                        bullet.x -= 0.2
+                        if bullet.x < -1:
+                            bullet.is_used = True
+                    case Dir.RIGHT:
+                        bullet.x += 0.2
+                        if self._width < bullet.y:
+                            bullet.is_used = True

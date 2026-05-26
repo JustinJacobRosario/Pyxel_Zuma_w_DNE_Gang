@@ -4,6 +4,7 @@ import pyxel
 from random import randint
 from enum import Enum
 from enemies import Color, Enemy, OrangeEnemy, RedEnemy, BlueEnemy
+from model import Dir
 
 
 class View:
@@ -53,8 +54,22 @@ class View:
                 mid_y = y + (grid_size//2)
                 pyxel.circ(mid_x, mid_y, grid_size // 3, enemy.color.value)
 
-    def is_gun_clicked(self):
-        return pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT)
+    def is_left_clicked(self):
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            return Dir.UP
+        return None
+
+    def is_gun_wasd_clicked(self, allowed_dirs):
+        if (Dir.UP in allowed_dirs) and (pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_W)):
+            return Dir.UP
+        if (Dir.DOWN in allowed_dirs) and pyxel.btnp(pyxel.KEY_S):
+            return Dir.DOWN
+        if (Dir.LEFT in allowed_dirs) and pyxel.btnp(pyxel.KEY_A):
+            return Dir.LEFT
+        if (Dir.RIGHT in allowed_dirs) and pyxel.btnp(pyxel.KEY_D):
+            return Dir.RIGHT
+        
+        return None
 
     def display_bullets(self, height, total_grid_height, row_count, col_count, grid_size, bullets: list[Bullet]):
         

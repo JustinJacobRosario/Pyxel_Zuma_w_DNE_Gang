@@ -2,6 +2,8 @@ from enemies import Color
 from typing import Protocol
 from enum import Enum
 from abc import ABC, abstractmethod
+from model import Dir
+
 
 
 class Bullet(ABC):
@@ -11,6 +13,7 @@ class Bullet(ABC):
 		self._radius = radius
 		self._color = Color.Orange
 		self._is_used = False
+		self._direction = Dir.UP
 
 	@property
 	def x(self):
@@ -32,6 +35,10 @@ class Bullet(ABC):
 	def color(self):
 		return self._color
 
+	@property
+	def direction(self):
+		return self._direction
+
 	@x.setter
 	def x(self, value):
 		self._x = value
@@ -47,6 +54,10 @@ class Bullet(ABC):
 	@is_used.setter
 	def is_used(self, value):
 		self._is_used = value
+
+	@direction.setter
+	def direction(self, value):
+		self._direction = value
 
 class OrangeBullet(Bullet):
 	def __init__(self, x, y, radius):
