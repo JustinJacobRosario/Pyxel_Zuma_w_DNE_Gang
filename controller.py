@@ -2,9 +2,8 @@ from model import (Phase1Model, Phase2Model, Dir)
 from view import View
 import pyxel
 
-
 class Controller:
-    def __init__(self, model: Model, view: View):
+    def __init__(self, model: Phase1Model, view: View):
         self._model = model
         self._view = view
 
@@ -15,23 +14,20 @@ class Controller:
         model.will_quit()
 
         if not self._model.is_game_over:
-
             model.inc_tick()
             model.move_bullet()
             model.process_shot()
 
-
             for enemy in list(model.displayed_enemies):
                 model.move_enemy(enemy)
-            model.display_next_enemy()
 
-            
+            model.display_next_enemy()
             wasd_val = view.is_gun_wasd_clicked(model.allowed_dirs)
+        
             if wasd_val != None:
                 model.shoot(wasd_val)
 
         model.delete_enemy_out_of_bounds()
-
         model.check_if_next_round()
         model.check_is_game_over()
 
@@ -62,7 +58,7 @@ class Controller:
             model.dimensions[1], 
             model.dimensions[0], 
             model.grid_size,
-             model.displayed_enemies)
+            model.displayed_enemies)
 
         view.display_bullets(
             model.height, 
