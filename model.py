@@ -31,21 +31,7 @@ class Phase1Model(ABC):
         cols, rows  = self._dimensions
         self._grid_size = self._width // cols
         self._total_grid_height = rows * self._grid_size
-        self._path = [
-            (3, 0), 
-            (3, 1), 
-            (3, 2), 
-            (3, 3), 
-            (3, 4), 
-            (3, 5), 
-            (3, 6), 
-            (3, 7), 
-            (3, 8), 
-            (3, 9), 
-            (3, 10), 
-            (3, 11), 
-            (3, 12), 
-            (3, 13)]
+        self._path = [(3, i) for i in range(14)]
         self._start_row = self._path[0][0]
         self._start_col = self._path[0][1]
         self._enemies = [[OrangeEnemy() for _ in range(5)]]
@@ -63,7 +49,6 @@ class Phase1Model(ABC):
         self._exp = 0
         self._hp = 2
         
-
     @property
     def width(self):
         return self._width
@@ -91,7 +76,6 @@ class Phase1Model(ABC):
     @property
     def next_color(self):
         return self._next_color
-    
 
     @property
     def path(self) -> bool:
@@ -144,8 +128,6 @@ class Phase1Model(ABC):
     @property
     def rounds(self):
         return self._rounds
-    
-
 
     def inc_tick(self):
         self._tick += 1
@@ -161,6 +143,7 @@ class Phase1Model(ABC):
     def check_if_next_round(self):
         if (len(self._enemies[self._current_round - 1]) == 0) and (len(self._displayed_enemies) == 0) and ((self._current_round) < self._rounds):
                 self._current_round += 1
+
     def display_next_enemy(self):
         if (self._tick%50 == 0) and (len(self._enemies[self._current_round - 1]) != 0):
             self._displayed_enemies.append(self._enemies[self._current_round - 1].pop())
@@ -238,8 +221,6 @@ class Phase1Model(ABC):
                 if bullet.row < -1:
                     bullet.is_used = True
 
-
-
 class Phase2Model(Phase1Model):
     def __init__(self):
         super().__init__()
@@ -252,12 +233,12 @@ class Phase2Model(Phase1Model):
             [(choice([OrangeEnemy(), RedEnemy()])) for _ in range(5)],
             [(choice([OrangeEnemy(), RedEnemy()])) for _ in range(5)]]
         self._rounds = len(self._enemies)
+
     @property
     def allowed_dirs(self):
         return [Dir.UP, Dir.DOWN, Dir.LEFT, Dir.RIGHT]
 
     def move_bullet(self):
-
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
 
