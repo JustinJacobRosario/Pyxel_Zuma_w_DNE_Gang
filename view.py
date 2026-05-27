@@ -9,7 +9,7 @@ from model import Dir
 
 class View:
     def start_game(self, width, height) -> None:
-        pyxel.init(width, height, title="zuma")
+        pyxel.init(width, height, title="zuma", fps=30)
         pyxel.mouse(False)
         #pyxel.load("...")
 
