@@ -44,15 +44,16 @@ class View:
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
-        for enemy in enemies:
+        if enemies:
+            for enemy in enemies:
 
-            if enemy.current_health > 0:
-                x = enemy.x * grid_size
-                y = vert_offset + (enemy.y * grid_size)
+                if enemy.current_health > 0:
+                    x = enemy.x * grid_size
+                    y = vert_offset + (enemy.y * grid_size)
 
-                mid_x = x + (grid_size//2)
-                mid_y = y + (grid_size//2)
-                pyxel.circ(mid_x, mid_y, grid_size // 3, enemy.color.value)
+                    mid_x = x + (grid_size//2)
+                    mid_y = y + (grid_size//2)
+                    pyxel.circ(mid_x, mid_y, grid_size // 3, enemy.color.value)
 
     def is_left_clicked(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -96,10 +97,11 @@ class View:
 
         pyxel.circ(mid_x, mid_y, grid_size // 4, 0)
 
-    def display_text(self, hp, exp, font_addrss, size):
+    def display_text(self, current_round, rounds, hp, exp, font_addrss, size):
         font = pyxel.Font(font_addrss, size)
-        pyxel.text(10, 10, f"Health: {hp}", 7, font)
-        pyxel.text(10, 35, f"EXP: {exp}", 7, font)
+        pyxel.text(50, 20, f"ROUND: {current_round}/{rounds}", 7, font)
+        pyxel.text(250, 20, f"Health: {hp}", 7, font)
+        pyxel.text(450, 20, f"EXP: {exp}", 7, font)
 
 
     def display_cursor(self, next_color):

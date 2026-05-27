@@ -92,7 +92,7 @@ class Enemy(ABC):
 		
 
 class OrangeEnemy(Enemy):
-	def __init__(self, start_x, start_y, radius):
+	def __init__(self, start_x = 0, start_y = 0, radius = 15):
 		super().__init__(start_x, start_y, radius)
 		self._walk_speed = 0.1
 		self._color = Color.Orange
@@ -100,14 +100,14 @@ class OrangeEnemy(Enemy):
 		self._current_health = 1
 
 class RedEnemy(Enemy):
-	def __init__(self, start_x, start_y, radius):
+	def __init__(self, start_x = 0, start_y = 0, radius = 15):
 		super().__init__(start_x, start_y, radius)
 		self._walk_speed = 0.1
 		self._color = Color.Red
 		self._base_health = 1
 		self._current_health = 1
 class BlueEnemy(Enemy):
-	def __init__(self, start_x, start_y, radius):
+	def __init__(self, start_x = 0, start_y = 0, radius = 15):
 		super().__init__(start_x, start_y, radius)
 		self._walk_speed = 0.1
 		self._color = Color.Blue

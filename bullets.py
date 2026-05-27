@@ -60,17 +60,17 @@ class Bullet(ABC):
 		self._direction = value
 
 class OrangeBullet(Bullet):
-	def __init__(self, x, y, radius):
+	def __init__(self, x = 0, y = 0, radius = 5):
 		super().__init__(x, y, radius)
 		self._color = Color.Orange
 
 class RedBullet(Bullet):
-	def __init__(self, x, y, radius):
+	def __init__(self, x = 0, y = 0, radius = 5):
 		super().__init__(x, y, radius)
 		self._color = Color.Red
 
 class BlueBullet(Bullet):
-	def __init__(self, x, y, radius):
+	def __init__(self, x = 0, y = 0, radius = 5):
 		super().__init__(x, y, radius)
 		self._color = Color.Blue
 

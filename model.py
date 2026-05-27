@@ -5,6 +5,8 @@ from random import Random, choice
 import pyxel
 from typing import Protocol
 from enum import Enum, auto
+from enemies import Color
+from random import choice
 
 class Dir(Enum):
     UP = auto()
@@ -14,6 +16,7 @@ class Dir(Enum):
 
 from enemies import Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet, OrangeBullet, RedBullet, BlueBullet
+
 
 
 
@@ -43,19 +46,16 @@ class Phase1Model(ABC):
             (3, 13)]
         self._start_row = self._path[0][0]
         self._start_col = self._path[0][1]
-        self._enemies = [
-            OrangeEnemy(self._start_col, self._start_row, self._grid_size//3),
-            RedEnemy(self._start_col, self._start_row, self._grid_size//3), 
-            BlueEnemy(self._start_col, self._start_row, self._grid_size//3)]
-        self._displayed_enemies = [
-            OrangeEnemy(self._start_col, self._start_row, self._grid_size//3)]
+        self._enemies = [[OrangeEnemy() for _ in range(5)]]
+        self._rounds = len(self._enemies)
+        self._current_round = 1
+
+        self._displayed_enemies = []
         self._tick = 0
         self._gun_coords = (7, 5)
-        self._pending_bullets = [
-            OrangeBullet(self._gun_coords[0], self._gun_coords[1], self._grid_size//5),
-            OrangeBullet(self._gun_coords[0], self._gun_coords[1], self._grid_size//5),
-            RedBullet(self._gun_coords[0], self._gun_coords[1], self._grid_size//5),
-            BlueBullet(self._gun_coords[0], self._gun_coords[1], self._grid_size//5)]
+
+        self._pending_bullets = [choice([OrangeBullet(), RedBullet(), BlueBullet()])]
+        
         self._displayed_bullets = []
         self._next_color = 7
         self._exp = 0
@@ -135,6 +135,15 @@ class Phase1Model(ABC):
     def allowed_dirs(self):
         return [Dir.UP]
 
+    @property
+    def current_round(self):
+        return self._current_round
+    
+    @property
+    def rounds(self):
+        return self._rounds
+    
+
 
     def inc_tick(self):
         self._tick += 1
@@ -147,9 +156,13 @@ class Phase1Model(ABC):
         if self._hp <= 0:
             self._is_game_over = True
 
+    def check_if_next_round(self):
+        if (len(self._enemies[self._current_round - 1]) == 0) and (len(self._displayed_enemies) == 0) and ((self._current_round) < self._rounds):
+                self._current_round += 1
     def display_next_enemy(self):
-        if (self._tick%50 == 0) and (len(self._enemies) != 0):
-            self._displayed_enemies.append(self._enemies.pop())
+        if (self._tick%50 == 0) and (len(self._enemies[self._current_round - 1]) != 0):
+            self._displayed_enemies.append(self._enemies[self._current_round - 1].pop())
+            print(f"displayed: {len(self._displayed_enemies)}  remaining: {len(self._enemies[self._current_round - 1])}")
 
     def move_enemy(self, enemy: Enemy):
         path = self._path
@@ -174,10 +187,14 @@ class Phase1Model(ABC):
         enemy.y = p1[0] + (p2[0] - p1[0]) * percent
         enemy.x = p1[1] + (p2[1] - p1[1]) * percent
 
+    def delete_enemy_out_of_bounds(self):
+        self._displayed_enemies = [e for e in self._displayed_enemies if e.current_health > 0]
+        self._displayed_bullets = [b for b in self._displayed_bullets if not b.is_used]
     def process_shot(self):
         if self._pending_bullets:
             self._next_color = self.pending_bullets[-1].color.value
-
+        else:
+            self._next_color = Color.Black.value
 
         for bullet in self._displayed_bullets:
             x = bullet.x
@@ -198,6 +215,7 @@ class Phase1Model(ABC):
     def shoot(self, dir: Dir):
         if self._pending_bullets:
             bullet = self._pending_bullets.pop()
+            self._pending_bullets.append(choice([OrangeBullet(), RedBullet(), BlueBullet()]))
             bullet.direction = dir
             bullet.x = self._gun_coords[0]
             bullet.y = self._gun_coords[1]
@@ -221,7 +239,10 @@ class Phase2Model(Phase1Model):
             (4, 13), (3, 13), (3, 12), (3, 11), (3, 10), (3, 9), (3, 8), (3, 7), (3, 6), (3, 5), (3, 4), (3, 3), (3, 2), (3, 1),
             (2, 1), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14)]
         self._gun_coords = (7, 4)
-
+        self._enemies = [
+            [(choice([OrangeEnemy(), RedEnemy()])) for _ in range(5)],
+            [(choice([OrangeEnemy(), RedEnemy()])) for _ in range(5)]]
+        self._rounds = len(self._enemies)
     @property
     def allowed_dirs(self):
         return [Dir.UP, Dir.DOWN, Dir.LEFT, Dir.RIGHT]
@@ -248,3 +269,5 @@ class Phase2Model(Phase1Model):
                         bullet.x += 0.2
                         if self._width < bullet.y:
                             bullet.is_used = True
+
+
