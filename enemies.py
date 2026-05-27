@@ -21,13 +21,13 @@ class Color(Enum):
 	Peach = 15
 
 class Enemy(ABC):
-	def __init__(self, start_x, start_y, radius):
+	def __init__(self, start_col, start_row, radius):
 		self._walk_speed = 0.1
 		self._color = Color.Orange
 		self._base_health = 1
 		self._current_health = 1
-		self._x = float(start_x)
-		self._y = float(start_y)
+		self._col = float(start_col)
+		self._row = float(start_row)
 		self._radius = radius
 		self._next_idx = 1 # what ith path coord to go next
 		self._progress = 0 # basically like ith current/previous passed path coord, then yung decimals indicates the progress towards the next path coord
@@ -50,12 +50,12 @@ class Enemy(ABC):
 	
 
 	@property
-	def x(self):
-		return self._x
+	def col(self):
+		return self._col
 
 	@property
-	def y(self):
-		return self._y
+	def row(self):
+		return self._row
 
 	@property
 	def next_idx(self):
@@ -69,13 +69,13 @@ class Enemy(ABC):
 	def radius(self):
 		return self._radius
 
-	@x.setter
-	def x(self, value):
-		self._x = value
+	@col.setter
+	def col(self, value):
+		self._col = value
 
-	@y.setter
-	def y(self, value):
-		self._y = value
+	@row.setter
+	def row(self, value):
+		self._row = value
 
 	@radius.setter
 	def radius(self, value):
@@ -92,23 +92,23 @@ class Enemy(ABC):
 		
 
 class OrangeEnemy(Enemy):
-	def __init__(self, start_x = 0, start_y = 0, radius = 15):
-		super().__init__(start_x, start_y, radius)
+	def __init__(self, start_col = 0, start_row = 0, radius = 15):
+		super().__init__(start_col, start_row, radius)
 		self._walk_speed = 0.1
 		self._color = Color.Orange
 		self._base_health = 1
 		self._current_health = 1
 
 class RedEnemy(Enemy):
-	def __init__(self, start_x = 0, start_y = 0, radius = 15):
-		super().__init__(start_x, start_y, radius)
+	def __init__(self, start_col = 0, start_row = 0, radius = 15):
+		super().__init__(start_col, start_row, radius)
 		self._walk_speed = 0.1
 		self._color = Color.Red
 		self._base_health = 1
 		self._current_health = 1
 class BlueEnemy(Enemy):
-	def __init__(self, start_x = 0, start_y = 0, radius = 15):
-		super().__init__(start_x, start_y, radius)
+	def __init__(self, start_col = 0, start_row = 0, radius = 15):
+		super().__init__(start_col, start_row, radius)
 		self._walk_speed = 0.1
 		self._color = Color.Blue
 		self._base_health = 1

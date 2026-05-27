@@ -8,6 +8,8 @@ from enum import Enum, auto
 from enemies import Color
 from random import choice
 
+
+# directions for the wasd directions of the bullet
 class Dir(Enum):
     UP = auto()
     DOWN = auto()
@@ -25,10 +27,10 @@ class Phase1Model(ABC):
         self._width: int = width
         self._height: int = height
         self._is_game_over = False
-        self._dimensions = (15, 7) # num of cols and rows
-        cols,rows  = self._dimensions
+        self._dimensions = (15, 7) # (cols, rows)
+        cols, rows  = self._dimensions
         self._grid_size = self._width // cols
-        self._total_grid_height = self._dimensions[1] * self._grid_size
+        self._total_grid_height = rows * self._grid_size
         self._path = [
             (3, 0), 
             (3, 1), 
@@ -52,9 +54,9 @@ class Phase1Model(ABC):
 
         self._displayed_enemies = []
         self._tick = 0
-        self._gun_coords = (7, 5)
+        self._gun_coords = (7, 5) # gun position (col, row)
 
-        self._pending_bullets = [choice([OrangeBullet(), RedBullet(), BlueBullet()])]
+        self._pending_bullets = [choice([OrangeBullet(), RedBullet(), BlueBullet()])] # always needs a bullet in the pending list to refer the next color sa cursor
         
         self._displayed_bullets = []
         self._next_color = 7
@@ -162,17 +164,19 @@ class Phase1Model(ABC):
     def display_next_enemy(self):
         if (self._tick%50 == 0) and (len(self._enemies[self._current_round - 1]) != 0):
             self._displayed_enemies.append(self._enemies[self._current_round - 1].pop())
-            print(f"displayed: {len(self._displayed_enemies)}  remaining: {len(self._enemies[self._current_round - 1])}")
-
+            
     def move_enemy(self, enemy: Enemy):
         path = self._path
 
-        enemy.progress += enemy.walk_speed
-
+        enemy.progress += enemy.walk_speed 
+            # progress : whole num is yung index ng current grid
+            #            decimal num is yung percentage ng grid length to cover before going to the next grid
+            #            e.g. lets say nasa 4th indexed grid coord na yung enemy, then nasa gitna sya ng grid, then progress = 4.5 since 50% pa need icover bago pumunta sa next grid
+        
         current_path_idx = int(enemy.progress)
         next_path_idx = current_path_idx + 1
 
-        if next_path_idx >= len(path):
+        if next_path_idx >= len(path): # if nakalagpas na yung enemy, -1 hp
             if enemy.current_health > 0:
                 enemy.current_health = 0
                 self._hp -= 1
@@ -184,12 +188,14 @@ class Phase1Model(ABC):
         p1 = path[current_path_idx]
         p2 = path[next_path_idx]
 
-        enemy.y = p1[0] + (p2[0] - p1[0]) * percent
-        enemy.x = p1[1] + (p2[1] - p1[1]) * percent
+        # update row and col
+        enemy.row = p1[0] + (p2[0] - p1[0]) * percent
+        enemy.col = p1[1] + (p2[1] - p1[1]) * percent
 
     def delete_enemy_out_of_bounds(self):
         self._displayed_enemies = [e for e in self._displayed_enemies if e.current_health > 0]
         self._displayed_bullets = [b for b in self._displayed_bullets if not b.is_used]
+    
     def process_shot(self):
         if self._pending_bullets:
             self._next_color = self.pending_bullets[-1].color.value
@@ -197,16 +203,18 @@ class Phase1Model(ABC):
             self._next_color = Color.Black.value
 
         for bullet in self._displayed_bullets:
-            x = bullet.x
-            y = bullet.y
-            r1 = bullet.radius / self.grid_size
+            b_col = bullet.col
+            b_row = bullet.row
+
+
+            r1 = bullet.radius / self.grid_size # bullet radius in pixels
 
             for enemy in self._displayed_enemies:
-                target_x = enemy.x
-                target_y = enemy.y
-                r2 = enemy.radius / self.grid_size
+                e_col = enemy.col
+                e_row = enemy.row
+                r2 = enemy.radius / self.grid_size # enemy radius in pixels
                 
-                if (((x-target_x)**2 + (y-target_y)**2) <= (r1 + r2)**2) and (bullet.color == enemy.color):
+                if (((b_col - e_col)**2 + (b_row - e_row)**2) <= (r1 + r2)**2) and (bullet.color == enemy.color):
                     bullet.is_used = True
                     enemy.current_health -= 1
                     
@@ -217,16 +225,17 @@ class Phase1Model(ABC):
             bullet = self._pending_bullets.pop()
             self._pending_bullets.append(choice([OrangeBullet(), RedBullet(), BlueBullet()]))
             bullet.direction = dir
-            bullet.x = self._gun_coords[0]
-            bullet.y = self._gun_coords[1]
+
+            bullet.col = self._gun_coords[0]
+            bullet.row = self._gun_coords[1]
             self._displayed_bullets.append(bullet)
 
     def move_bullet(self):
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
 
-                bullet.y -= 0.2
-                if self._dimensions[1] < bullet.y < -1:
+                bullet.row -= 0.2
+                if bullet.row < -1:
                     bullet.is_used = True
 
 
@@ -254,20 +263,20 @@ class Phase2Model(Phase1Model):
 
                 match bullet.direction:
                     case Dir.UP:
-                        bullet.y -= 0.2
-                        if bullet.y < -1:
+                        bullet.row -= 0.2
+                        if bullet.row < -1:
                             bullet.is_used = True
                     case Dir.DOWN:
-                        bullet.y += 0.2
-                        if self._height < bullet.y:
+                        bullet.row += 0.2
+                        if self._dimensions[1] < bullet.row: # out-of-bounds
                             bullet.is_used = True
                     case Dir.LEFT:
-                        bullet.x -= 0.2
-                        if bullet.x < -1:
+                        bullet.col -= 0.2
+                        if bullet.col < -1:
                             bullet.is_used = True
                     case Dir.RIGHT:
-                        bullet.x += 0.2
-                        if self._width < bullet.y:
+                        bullet.col += 0.2
+                        if self._width < bullet.row:
                             bullet.is_used = True
 
 

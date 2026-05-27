@@ -40,12 +40,53 @@ class Controller:
         view = self._view
 
         view.reset_screen()
-        view.display_map(model.height, model.total_grid_height, model.dimensions[1], model.dimensions[0], model.grid_size)
-        view.display_path(model.height, model.total_grid_height, model.dimensions[1], model.dimensions[0], model.grid_size, model.path)
-        view.display_enemies(model.height, model.total_grid_height, model.dimensions[1], model.dimensions[0], model.grid_size, model.displayed_enemies)
-        view.display_bullets(model.height, model.total_grid_height, model.dimensions[1], model.dimensions[0], model.grid_size, model.displayed_bullets)
-        view.display_gun(model.height, model.total_grid_height, model.grid_size, model.gun_coords[0], model.gun_coords[1])
-        view.display_text(model.current_round, model.rounds, model.hp, model.exp, "UbuntuMono-Regular.ttf", 25)
+
+        view.display_map(
+            model.height, 
+            model.total_grid_height, 
+            model.dimensions[1], 
+            model.dimensions[0], 
+            model.grid_size)
+
+        view.display_path(
+            model.height, 
+            model.total_grid_height, 
+            model.dimensions[1], 
+            model.dimensions[0], 
+            model.grid_size, 
+            model.path)
+
+        view.display_enemies(
+            model.height, 
+            model.total_grid_height, 
+            model.dimensions[1], 
+            model.dimensions[0], 
+            model.grid_size,
+             model.displayed_enemies)
+
+        view.display_bullets(
+            model.height, 
+            model.total_grid_height, 
+            model.dimensions[1], 
+            model.dimensions[0], 
+            model.grid_size, 
+            model.displayed_bullets)
+
+        view.display_gun(
+            model.height, 
+            model.total_grid_height, 
+            model.grid_size, 
+            model.gun_coords[0], 
+            model.gun_coords[1])
+
+        view.display_text(
+            model.current_round, 
+            model.rounds, 
+            model.hp, 
+            model.exp, 
+            "UbuntuMono-Regular.ttf", 
+            25)
+        
         view.display_cursor(model.next_color)
 
     def start_game(self):

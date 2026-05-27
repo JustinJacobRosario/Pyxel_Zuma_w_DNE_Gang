@@ -22,6 +22,7 @@ class View:
 
         for r in range(row_count):
             for c in range(col_count):
+                # grid coor to pixel
                 x = c * grid_size
                 y = vert_offset + (r * grid_size)
                 
@@ -48,8 +49,8 @@ class View:
             for enemy in enemies:
 
                 if enemy.current_health > 0:
-                    x = enemy.x * grid_size
-                    y = vert_offset + (enemy.y * grid_size)
+                    x = enemy.col * grid_size
+                    y = vert_offset + (enemy.row * grid_size)
 
                     mid_x = x + (grid_size//2)
                     mid_y = y + (grid_size//2)
@@ -80,17 +81,18 @@ class View:
         for bullet in bullets:
 
             if not bullet.is_used:
-                x = bullet.x * grid_size
-                y = vert_offset + (bullet.y * grid_size)
+                x = bullet.col * grid_size
+                y = vert_offset + (bullet.row * grid_size)
 
                 mid_x = x + (grid_size//2)
                 mid_y = y + (grid_size//2)
                 pyxel.circ(mid_x, mid_y, grid_size // 5, bullet.color.value)
-    def display_gun(self, height, total_grid_height, grid_size, x, y):
+
+    def display_gun(self, height, total_grid_height, grid_size, gun_col, gun_row):
         vert_offset = (height - total_grid_height) // 2
 
-        x = x * grid_size
-        y = vert_offset + (y * grid_size)
+        x = gun_col * grid_size
+        y = vert_offset + (gun_row * grid_size)
 
         mid_x = x + (grid_size//2)
         mid_y = y + (grid_size//2)
