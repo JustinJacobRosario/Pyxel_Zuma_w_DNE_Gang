@@ -47,7 +47,6 @@ class Enemy(ABC):
 	@property
 	def current_health(self):
 		return self._current_health
-	
 
 	@property
 	def col(self):
@@ -89,8 +88,6 @@ class Enemy(ABC):
 	def current_health(self, value):
 		self._current_health = value
 
-		
-
 class OrangeEnemy(Enemy):
 	def __init__(self, start_col = 0, start_row = 0, radius = 15):
 		super().__init__(start_col, start_row, radius)
@@ -106,6 +103,7 @@ class RedEnemy(Enemy):
 		self._color = Color.Red
 		self._base_health = 1
 		self._current_health = 1
+
 class BlueEnemy(Enemy):
 	def __init__(self, start_col = 0, start_row = 0, radius = 15):
 		super().__init__(start_col, start_row, radius)
