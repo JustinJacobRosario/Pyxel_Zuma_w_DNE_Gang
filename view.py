@@ -4,19 +4,16 @@ import pyxel
 from random import randint
 from enum import Enum
 from enemies import Color, Enemy, OrangeEnemy, RedEnemy, BlueEnemy
+from bullets import Bullet
 from model import Dir
 
-
 class View:
-
-
     def start_game(self, width, height) -> None:
         pyxel.init(width, height, title="zuma")
         pyxel.mouse(False)
         #pyxel.load("...")
 
     def display_map(self, height, total_grid_height, row_count, col_count, grid_size):
-
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
@@ -30,7 +27,6 @@ class View:
                 pyxel.rect(x, y, grid_size, grid_size, color)
 
     def display_path(self, height, total_grid_height, row_count, col_count, grid_size, path_cells):
-
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
@@ -41,13 +37,11 @@ class View:
             pyxel.rect(x, y, grid_size, grid_size, 7)
 
     def display_enemies(self, height, total_grid_height, row_count, col_count, grid_size, enemies: list[Enemy]):
-        
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
         if enemies:
             for enemy in enemies:
-
                 if enemy.current_health > 0:
                     x = enemy.col * grid_size
                     y = vert_offset + (enemy.row * grid_size)
@@ -73,19 +67,19 @@ class View:
         
         return None
 
-    def display_bullets(self, height, total_grid_height, row_count, col_count, grid_size, bullets: list[Bullet]):
-        
+    def display_bullets(self, height, total_grid_height, row_count, 
+                        col_count, grid_size, bullets: list[Bullet]):
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
         for bullet in bullets:
-
             if not bullet.is_used:
                 x = bullet.col * grid_size
                 y = vert_offset + (bullet.row * grid_size)
 
                 mid_x = x + (grid_size//2)
                 mid_y = y + (grid_size//2)
+
                 pyxel.circ(mid_x, mid_y, grid_size // 5, bullet.color.value)
 
     def display_gun(self, height, total_grid_height, grid_size, gun_col, gun_row):
@@ -104,7 +98,6 @@ class View:
         pyxel.text(50, 20, f"ROUND: {current_round}/{rounds}", 7, font)
         pyxel.text(250, 20, f"Health: {hp}", 7, font)
         pyxel.text(450, 20, f"EXP: {exp}", 7, font)
-
 
     def display_cursor(self, next_color):
         x = pyxel.mouse_x
