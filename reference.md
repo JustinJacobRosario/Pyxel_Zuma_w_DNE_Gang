@@ -11,7 +11,7 @@ self._width  # The width of the screen
 self._height  # The height of the screen
 self._is_game_over  # Sets to true if game over conds satisfied
 self._dimensions  # (columns, rows) of the gridded map
-self._grid_size  # side length of a cell in pixels
+self._cell_size  # side length of a cell in pixels
 self._total_grid_height  # height of the map UI in pixels
 self._path  # The coordinates of the tiles
 self._start_row  # Row of the first appearance of enemy
@@ -47,13 +47,13 @@ move_bullet()
 ## View
 ```py
 start_game(width, height)
-display_map(height, total_grid_height, row_count, col_count, grid_size)
-display_path(height, total_grid, height, row_count, col_count, grid_size, path_cells)
-display_enemies(height, total_grid_height, row_count, col_count, grid_size, enemies: list[Enemy])
+display_map(height, total_grid_height, row_count, col_count, cell_size)
+display_path(height, total_grid, height, row_count, col_count, cell_size, path_cells)
+display_enemies(height, total_grid_height, row_count, col_count, cell_size, enemies: list[Enemy])
 is_left_clicked()
 is_gun_wasd_clicked()
-display_bullets(height, total_grid_height, row_count, col_count, grid_size, bullets: list[Bullet])
-display_gun(height, total_grid_height, grid_size, gun_col, gun_row)
+display_bullets(height, total_grid_height, row_count, col_count, cell_size, bullets: list[Bullet])
+display_gun(height, total_grid_height, cell_size, gun_col, gun_row)
 display_text(current_round, rounds, hp, exp, font_addrss, size)
 display_cursor(next_color)
 reset_screen()
