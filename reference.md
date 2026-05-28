@@ -31,6 +31,19 @@ self._hp  # Tracks the hp
 Those with `?` comments are variables I cannot identify yet, please help me add details
 to these.
 
+```py
+inc_tick()  # Increase the tick
+will_quit()  # Checks if q is pressed to quit
+check_is_game_over()  # Updates game over bool
+check_if_next_round()  # Updates current round var
+display_next_enemy()
+move_enemy(enemy: Enemy)
+delete_enemy_out_of_bounds()
+process_shot()
+shoot(dir: Dir)
+move_bullet()
+```
+
 ## View
 ```py
 start_game(width, height)
