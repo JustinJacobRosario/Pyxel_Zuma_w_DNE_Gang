@@ -179,6 +179,7 @@ class Phase1Model(ABC):
         self._displayed_enemies = [e for e in self._displayed_enemies if e.current_health > 0]
         self._displayed_bullets = [b for b in self._displayed_bullets if not b.is_used]
     
+    # * Must check if a bug may occur in process_shot
     def process_shot(self):
         if self._pending_bullets:
             self._next_color = self.pending_bullets[-1].color.value
@@ -189,13 +190,15 @@ class Phase1Model(ABC):
             b_col = bullet.col
             b_row = bullet.row
 
-
-            r1 = bullet.radius / self.grid_size # bullet radius in pixels
+            # bullet radius in pixels
+            r1 = bullet.radius / self.grid_size 
 
             for enemy in self._displayed_enemies:
                 e_col = enemy.col
                 e_row = enemy.row
-                r2 = enemy.radius / self.grid_size # enemy radius in pixels
+
+                # enemy radius in pixels
+                r2 = enemy.radius / self.grid_size 
                 
                 if (((b_col - e_col)**2 + (b_row - e_row)**2) <= (r1 + r2)**2) and (bullet.color == enemy.color):
                     bullet.is_used = True
@@ -221,6 +224,7 @@ class Phase1Model(ABC):
                 if bullet.row < -1:
                     bullet.is_used = True
 
+# TODO: Add tower feature and get details from setting.json
 class Phase2Model(Phase1Model):
     def __init__(self):
         super().__init__()
