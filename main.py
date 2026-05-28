@@ -6,8 +6,6 @@ import pyxel
 if __name__ == '__main__':
     model = Phase2Model()
     view = View()
-
-
     controller = Controller(model, view) 
-
+    
     controller.start_game()
