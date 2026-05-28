@@ -13,7 +13,9 @@ class View:
         pyxel.mouse(False)
         #pyxel.load("...")
 
-    def display_map(self, height, total_grid_height, row_count, col_count, grid_size):
+    # ? Can we reduce the parameters here
+    def display_map(self, height, total_grid_height, row_count, 
+                    col_count, grid_size):
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
@@ -26,7 +28,9 @@ class View:
                 color = 10 if (r + c) % 2 == 0 else 11
                 pyxel.rect(x, y, grid_size, grid_size, color)
 
-    def display_path(self, height, total_grid_height, row_count, col_count, grid_size, path_cells):
+    # ? Can we reduce the parameters here
+    def display_path(self, height, total_grid_height, row_count, 
+                     col_count, grid_size, path_cells):
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
@@ -36,7 +40,9 @@ class View:
             
             pyxel.rect(x, y, grid_size, grid_size, 7)
 
-    def display_enemies(self, height, total_grid_height, row_count, col_count, grid_size, enemies: list[Enemy]):
+    # ? Can we reduce the parameters here
+    def display_enemies(self, height, total_grid_height, row_count, 
+                        col_count, grid_size, enemies: list[Enemy]):
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
