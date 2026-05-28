@@ -38,6 +38,7 @@ class Phase1Model(ABC):
         self._rounds = 2
         self._enemies = [[OrangeEnemy() for _ in range(5)] for _ in range(self._rounds)]
         self._current_round = 1
+        self._waiting_for_start = True # start in waiting before round 1 starts
 
         self._displayed_enemies = []
         self._tick = 0
@@ -131,6 +132,13 @@ class Phase1Model(ABC):
     @property
     def rounds(self):
         return self._rounds
+    
+    @property
+    def waiting_for_start(self):
+        return self._waiting_for_start
+    
+    def start_round(self):
+        self._waiting_for_start = False
 
     def inc_tick(self):
         self._tick += 1
@@ -146,6 +154,7 @@ class Phase1Model(ABC):
     def check_if_next_round(self):
         if (len(self._enemies[self._current_round - 1]) == 0) and (len(self._displayed_enemies) == 0) and ((self._current_round) < self._rounds):
                 self._current_round += 1
+                self._waiting_for_start = True # pause between rounds
 
     def display_next_enemy(self):
         if (self._tick%50 == 0) and (len(self._enemies[self._current_round - 1]) != 0):

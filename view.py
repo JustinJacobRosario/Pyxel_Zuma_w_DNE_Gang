@@ -105,6 +105,17 @@ class View:
         pyxel.text(250, 20, f"Health: {hp}", 7, font)
         pyxel.text(450, 20, f"EXP: {exp}", 7, font)
 
+    def display_start_button(self, width, height, current_round):
+        btn_w, btn_h = 150, 50
+        x = width - btn_w - 25
+        y = height - btn_h - 40
+
+        pyxel.rect(x, y, btn_w, btn_h, 7)
+        pyxel.text(x + 15, y + 11, f"PRESS SPACE TO START ROUND {current_round}", 0)
+
+    def is_start_pressed(self, width, height):
+        return pyxel.btnp(pyxel.KEY_SPACE)
+
     def display_cursor(self, next_color):
         x = pyxel.mouse_x
         y = pyxel.mouse_y

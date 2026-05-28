@@ -13,30 +13,38 @@ class Controller:
 
         # Quits if 'q' is pressed
         model.will_quit()
-
-        if not self._model.is_game_over:
-            model.inc_tick()
-            model.move_bullet()
-            model.process_shot()
-
-            for enemy in list(model.displayed_enemies):
-                model.move_enemy(enemy)
-
-            model.display_next_enemy()
-            wasd_val = view.is_gun_wasd_clicked()
+        if model.waiting_for_start:
+            if view.is_start_pressed(model.width, model.height):
+                model.start_round()
+            return # freezes rendering of enemies/bullets
         
-            if wasd_val is not None:
-                model.shoot(wasd_val)
+        else:
+            if not self._model.is_game_over:
+                model.inc_tick()
+                model.move_bullet()
+                model.process_shot()
 
-        model.delete_enemy_out_of_bounds()
-        model.check_if_next_round()
-        model.check_is_game_over()
+                for enemy in list(model.displayed_enemies):
+                    model.move_enemy(enemy)
+
+                model.display_next_enemy()
+                wasd_val = view.is_gun_wasd_clicked()
+
+                if wasd_val is not None:
+                    model.shoot(wasd_val)
+
+            model.delete_enemy_out_of_bounds()
+            model.check_if_next_round()
+            model.check_is_game_over()
 
     def draw(self):
         model = self._model
         view = self._view
 
         view.reset_screen()
+
+        if model.waiting_for_start:
+            view.display_start_button(model.width, model.height, model.current_round)
 
         view.display_map(
             model.height, 
