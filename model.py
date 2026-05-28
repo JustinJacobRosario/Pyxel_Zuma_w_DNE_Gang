@@ -128,7 +128,6 @@ class Phase1Model(ABC):
     
     @property
     def waiting_for_start(self):
-        print(self._cell_size)
         return self._waiting_for_start
     
     @property 

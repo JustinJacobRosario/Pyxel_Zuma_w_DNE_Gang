@@ -16,7 +16,7 @@ class View:
     def start_game(self, width, height) -> None:
         pyxel.init(width, height, title="zuma", fps=30)
         pyxel.mouse(False)
-        #pyxel.load("...")
+        pyxel.load("tilemap_sprites.pyxres")
 
     # ? Can we reduce the parameters here
     def display_map(self, height, total_grid_height, row_count, 
@@ -147,9 +147,51 @@ class View:
         x = pyxel.mouse_x
         y = pyxel.mouse_y
 
-        pyxel.circ(x, y, 5, next_color)
-        pyxel.circb(x, y, 5, 7)
+        pyxel.circ(x, y, 10, next_color)
+        pyxel.circb(x, y, 10, 7)
 
     def reset_screen(self) -> None:
         pyxel.cls(pyxel.COLOR_BLACK)
 
+    def draw_tilemap(self, height, total_grid_height, row_count, col_count, cell_size):
+            # same vert_offset
+            vert_offset = (height - total_grid_height) // 2
+    
+            tile_side_length = 16          # tile pixel side length
+            tile_scale = cell_size // tile_side_length + 1  # since cell_size is 72 and tile_side_length is 16, it will be 5x bigger
+    
+            # Calculate the offset to counteract the center-based scaling of blt()
+            offset = (cell_size - tile_side_length) // 2
+    
+            for r in range(row_count):
+                for c in range(col_count):
+                    # Topleft corner of each cell
+                    tl_x = c * cell_size
+                    tl_y = vert_offset + (r * cell_size)
+    
+                    # get tile_coord from pyxel editor
+                    tile_x, tile_y = pyxel.tilemap(0).pget(c * 2, r * 2)
+    
+                    # Convert to pixel coords in the image bank
+                    u = tile_x * 8
+                    v = tile_y * 8
+    
+                    pyxel.blt(tl_x + offset, tl_y + offset, 0, u, v, tile_side_length, tile_side_length, scale=tile_scale)
+
+    def display_border_panels(self, height, total_grid_height):
+        vert_offset = (height - total_grid_height) // 2  + 45
+        tile_side = 16
+        scale = 7  # renders as 112px, covers the 108px strip
+
+        u, v = 32, 48  # your border sprite coords — adjust to match
+
+        tiles_needed = (1080 // (tile_side * scale)) + 2
+
+        for i in range(tiles_needed):
+            x = i * tile_side * scale
+
+            # Top: fill from y=0 down to where the map actually starts
+            pyxel.blt(x, 0 + 45, 0, u, v, tile_side, tile_side, scale=scale)
+
+            # Bottom: fill from where the map ends to bottom of screen
+            pyxel.blt(x, vert_offset + total_grid_height, 0, u, v, tile_side, tile_side, scale=scale)

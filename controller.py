@@ -61,6 +61,10 @@ class Controller:
             model.dimensions[0], 
             model.cell_size, 
             model.path)
+        
+        view.draw_tilemap(model.height, model.total_grid_height, model.dimensions[1], model.dimensions[0], model.cell_size)
+
+        view.display_border_panels(model.height, model.total_grid_height)
 
         view.display_enemies(
             model.height, 
