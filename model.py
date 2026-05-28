@@ -9,6 +9,8 @@ from enemies import Color
 from random import choice
 import json
 
+from towers import Tower
+
 
 # directions for the wasd directions of the bullet
 class Dir(Enum):
@@ -52,6 +54,8 @@ class Phase1Model(ABC):
         self._hp = 2
 
         self._data = self.fetch_json_data()
+
+        self._tower_locs: list[Tower] = []
         
     @property
     def width(self):
@@ -137,6 +141,22 @@ class Phase1Model(ABC):
     def waiting_for_start(self):
         print(self._cell_size)
         return self._waiting_for_start
+    
+    @property 
+    def towers_locs(self):
+        return self._tower_locs
+    
+    def place_tower(self, tower: Tower, col, row):
+        # 
+        if (row, col) in self._path:
+            # that location is the path
+            return
+        if any(tower.col == col and tower.row == row for tower in self._tower_locs):
+            # tower already exists in that location
+            return
+        if self._exp < tower.exp_cost:
+            self._exp -= tower.exp_cost
+            self.towers_locs.append(tower)
     
     def start_round(self):
         self._waiting_for_start = False
