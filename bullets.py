@@ -2,7 +2,7 @@ from enemies import Color
 from typing import Protocol
 from enum import Enum
 from abc import ABC, abstractmethod
-from model import Dir
+from player import Dir
 
 
 

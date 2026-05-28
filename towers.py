@@ -53,9 +53,10 @@ class Tower(ABC):
         bullet.y = self._row
         bullet.is_used = False
         return bullet
-		
-class RainbowTower(Tower): # phase 2 tower: shoots upwards, cost 5
-	_exp_cost = 5
+
+# phase 2 tower: shoots upwards, cost 5	
+class RainbowTower(Tower): 
+    _exp_cost = 5
     _range = 5.0
     _bullet_colors = [Color.Orange, Color.Red, Color.Blue]
 

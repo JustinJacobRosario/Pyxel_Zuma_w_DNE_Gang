@@ -6,8 +6,8 @@ from enum import Enum
 
 from enemies import Color, Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet
-from model import Dir
 from towers import Tower
+from player import Dir
 
 class View:
     def __init__(self) -> None:

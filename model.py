@@ -10,20 +10,9 @@ from random import choice
 import json
 
 from towers import Tower
-
-
-# directions for the wasd directions of the bullet
-class Dir(Enum):
-    UP = auto()
-    DOWN = auto()
-    LEFT = auto()
-    RIGHT = auto()
-
 from enemies import Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet, OrangeBullet, RedBullet, BlueBullet
-
-
-
+from player import Dir
 
 class Phase1Model(ABC):
     def __init__(self, width: int = 1080, height: int = 720):

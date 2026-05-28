@@ -1,4 +1,5 @@
-from model import (Phase1Model, Phase2Model, Dir)
+from model import (Phase1Model, Phase2Model)
+from player import Dir
 from view import View
 import pyxel
 
