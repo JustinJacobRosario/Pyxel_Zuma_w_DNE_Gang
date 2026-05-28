@@ -11,6 +11,7 @@ class Controller:
         model = self._model
         view = self._view
 
+        # Quits if 'q' is pressed
         model.will_quit()
 
         if not self._model.is_game_over:
@@ -22,9 +23,9 @@ class Controller:
                 model.move_enemy(enemy)
 
             model.display_next_enemy()
-            wasd_val = view.is_gun_wasd_clicked(model.allowed_dirs)
+            wasd_val = view.is_gun_wasd_clicked()
         
-            if wasd_val != None:
+            if wasd_val is not None:
                 model.shoot(wasd_val)
 
         model.delete_enemy_out_of_bounds()
