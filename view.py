@@ -6,6 +6,7 @@ from enum import Enum
 from enemies import Color, Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet
 from model import Dir
+from towers import Tower
 
 class View:
     def start_game(self, width, height) -> None:
@@ -112,6 +113,28 @@ class View:
 
         pyxel.rect(x, y, btn_w, btn_h, 7)
         pyxel.text(x + 15, y + 11, f"PRESS SPACE TO START ROUND {current_round}", 0)
+
+    def display_placed_towers(self, height, total_grid_height, cell_size, towers: list[Tower]):
+        vert_offset = (height - total_grid_height) // 2
+
+        for tower in towers:
+            x = tower.col * cell_size
+            y = vert_offset + (tower.row * cell_size)
+
+            mid_x = x + (cell_size//2)
+            mid_y = y + (cell_size//2)
+
+            pyxel.circ(mid_x, mid_y, cell_size // 4, 12)
+
+    def get_clicked_cell(self, height, total_grid_height, cell_size):
+        # use for placing down towers
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            vert_offset = (height - total_grid_height) // 2
+            mouse_x, mouse_y = pyxel.mouse_x, pyxel.mouse_y
+            col = mouse_x // cell_size
+            row = (mouse_y - vert_offset) // cell_size
+            return col, row
+        return None
 
     def is_start_pressed(self, width, height):
         return pyxel.btnp(pyxel.KEY_SPACE)
