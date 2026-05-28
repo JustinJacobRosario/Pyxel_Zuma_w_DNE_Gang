@@ -55,14 +55,14 @@ class View:
             return Dir.UP
         return None
 
-    def is_gun_wasd_clicked(self, allowed_dirs):
-        if (Dir.UP in allowed_dirs) and (pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_W)):
+    def is_gun_wasd_clicked(self):
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_W):
             return Dir.UP
-        if (Dir.DOWN in allowed_dirs) and pyxel.btnp(pyxel.KEY_S):
+        elif pyxel.btnp(pyxel.KEY_S):
             return Dir.DOWN
-        if (Dir.LEFT in allowed_dirs) and pyxel.btnp(pyxel.KEY_A):
+        elif pyxel.btnp(pyxel.KEY_A):
             return Dir.LEFT
-        if (Dir.RIGHT in allowed_dirs) and pyxel.btnp(pyxel.KEY_D):
+        elif pyxel.btnp(pyxel.KEY_D):
             return Dir.RIGHT
         
         return None
