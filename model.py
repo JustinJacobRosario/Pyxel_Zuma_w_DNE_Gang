@@ -29,8 +29,8 @@ class Phase1Model(ABC):
         self._is_game_over = False
         self._dimensions = (15, 7) # (cols, rows)
         cols, rows  = self._dimensions
-        self._grid_size = self._width // cols
-        self._total_grid_height = rows * self._grid_size
+        self._cell_size = self._width // cols
+        self._total_grid_height = rows * self._cell_size
         self._path = [(3, i) for i in range(14)]
         self._start_row = self._path[0][0]
         self._start_col = self._path[0][1]
@@ -66,8 +66,8 @@ class Phase1Model(ABC):
         return self._dimensions
 
     @property
-    def grid_size(self):
-        return self._grid_size
+    def cell_size(self):
+        return self._cell_size
 
     @property
     def total_grid_height(self):
@@ -191,14 +191,14 @@ class Phase1Model(ABC):
             b_row = bullet.row
 
             # bullet radius in pixels
-            r1 = bullet.radius / self.grid_size 
+            r1 = bullet.radius / self.cell_size 
 
             for enemy in self._displayed_enemies:
                 e_col = enemy.col
                 e_row = enemy.row
 
                 # enemy radius in pixels
-                r2 = enemy.radius / self.grid_size 
+                r2 = enemy.radius / self.cell_size 
                 
                 if (((b_col - e_col)**2 + (b_row - e_row)**2) <= (r1 + r2)**2) and (bullet.color == enemy.color):
                     bullet.is_used = True

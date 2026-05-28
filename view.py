@@ -15,46 +15,46 @@ class View:
 
     # ? Can we reduce the parameters here
     def display_map(self, height, total_grid_height, row_count, 
-                    col_count, grid_size):
+                    col_count, cell_size):
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
         for r in range(row_count):
             for c in range(col_count):
                 # grid coor to pixel
-                x = c * grid_size
-                y = vert_offset + (r * grid_size)
+                x = c * cell_size
+                y = vert_offset + (r * cell_size)
                 
                 color = 10 if (r + c) % 2 == 0 else 11
-                pyxel.rect(x, y, grid_size, grid_size, color)
+                pyxel.rect(x, y, cell_size, cell_size, color)
 
     # ? Can we reduce the parameters here
     def display_path(self, height, total_grid_height, row_count, 
-                     col_count, grid_size, path_cells):
+                     col_count, cell_size, path_cells):
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
         for r, c in path_cells:
-            x = c * grid_size
-            y = vert_offset + (r * grid_size)
+            x = c * cell_size
+            y = vert_offset + (r * cell_size)
             
-            pyxel.rect(x, y, grid_size, grid_size, 7)
+            pyxel.rect(x, y, cell_size, cell_size, 7)
 
     # ? Can we reduce the parameters here
     def display_enemies(self, height, total_grid_height, row_count, 
-                        col_count, grid_size, enemies: list[Enemy]):
+                        col_count, cell_size, enemies: list[Enemy]):
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
         if enemies:
             for enemy in enemies:
                 if enemy.current_health > 0:
-                    x = enemy.col * grid_size
-                    y = vert_offset + (enemy.row * grid_size)
+                    x = enemy.col * cell_size
+                    y = vert_offset + (enemy.row * cell_size)
 
-                    mid_x = x + (grid_size//2)
-                    mid_y = y + (grid_size//2)
-                    pyxel.circ(mid_x, mid_y, grid_size // 3, enemy.color.value)
+                    mid_x = x + (cell_size//2)
+                    mid_y = y + (cell_size//2)
+                    pyxel.circ(mid_x, mid_y, cell_size // 3, enemy.color.value)
 
     def is_left_clicked(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
@@ -74,30 +74,30 @@ class View:
         return None
 
     def display_bullets(self, height, total_grid_height, row_count, 
-                        col_count, grid_size, bullets: list[Bullet]):
+                        col_count, cell_size, bullets: list[Bullet]):
         # para centered
         vert_offset = (height - total_grid_height) // 2
 
         for bullet in bullets:
             if not bullet.is_used:
-                x = bullet.col * grid_size
-                y = vert_offset + (bullet.row * grid_size)
+                x = bullet.col * cell_size
+                y = vert_offset + (bullet.row * cell_size)
 
-                mid_x = x + (grid_size//2)
-                mid_y = y + (grid_size//2)
+                mid_x = x + (cell_size//2)
+                mid_y = y + (cell_size//2)
 
-                pyxel.circ(mid_x, mid_y, grid_size // 5, bullet.color.value)
+                pyxel.circ(mid_x, mid_y, cell_size // 5, bullet.color.value)
 
-    def display_gun(self, height, total_grid_height, grid_size, gun_col, gun_row):
+    def display_gun(self, height, total_grid_height, cell_size, gun_col, gun_row):
         vert_offset = (height - total_grid_height) // 2
 
-        x = gun_col * grid_size
-        y = vert_offset + (gun_row * grid_size)
+        x = gun_col * cell_size
+        y = vert_offset + (gun_row * cell_size)
 
-        mid_x = x + (grid_size//2)
-        mid_y = y + (grid_size//2)
+        mid_x = x + (cell_size//2)
+        mid_y = y + (cell_size//2)
 
-        pyxel.circ(mid_x, mid_y, grid_size // 4, 0)
+        pyxel.circ(mid_x, mid_y, cell_size // 4, 0)
 
     def display_text(self, current_round, rounds, hp, exp, font_addrss, size):
         font = pyxel.Font(font_addrss, size)

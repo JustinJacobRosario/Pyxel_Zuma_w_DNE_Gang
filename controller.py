@@ -43,14 +43,14 @@ class Controller:
             model.total_grid_height, 
             model.dimensions[1], 
             model.dimensions[0], 
-            model.grid_size)
+            model.cell_size)
 
         view.display_path(
             model.height, 
             model.total_grid_height, 
             model.dimensions[1], 
             model.dimensions[0], 
-            model.grid_size, 
+            model.cell_size, 
             model.path)
 
         view.display_enemies(
@@ -58,7 +58,7 @@ class Controller:
             model.total_grid_height, 
             model.dimensions[1], 
             model.dimensions[0], 
-            model.grid_size,
+            model.cell_size,
             model.displayed_enemies)
 
         view.display_bullets(
@@ -66,13 +66,13 @@ class Controller:
             model.total_grid_height, 
             model.dimensions[1], 
             model.dimensions[0], 
-            model.grid_size, 
+            model.cell_size, 
             model.displayed_bullets)
 
         view.display_gun(
             model.height, 
             model.total_grid_height, 
-            model.grid_size, 
+            model.cell_size, 
             model.gun_coords[0], 
             model.gun_coords[1])
 
