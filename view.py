@@ -3,11 +3,15 @@ from typing import Protocol
 import pyxel
 from random import randint
 from enum import Enum
+
 from enemies import Color, Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet
 from model import Dir
 
 class View:
+    def __init__(self) -> None:
+        ...
+        
     def start_game(self, width, height) -> None:
         pyxel.init(width, height, title="zuma", fps=30)
         pyxel.mouse(False)
