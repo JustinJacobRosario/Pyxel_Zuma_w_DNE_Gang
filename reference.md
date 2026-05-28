@@ -32,5 +32,18 @@ Those with `?` comments are variables I cannot identify yet, please help me add 
 to these.
 
 ## View
+```py
+start_game(width, height)
+display_map(height, total_grid_height, row_count, col_count, grid_size)
+display_path(height, total_grid, height, row_count, col_count, grid_size, path_cells)
+display_enemies(height, total_grid_height, row_count, col_count, grid_size, enemies: list[Enemy])
+is_left_clicked()
+is_gun_wasd_clicked()
+display_bullets(height, total_grid_height, row_count, col_count, grid_size, bullets: list[Bullet])
+display_gun(height, total_grid_height, grid_size, gun_col, gun_row)
+display_text(current_round, rounds, hp, exp, font_addrss, size)
+display_cursor(next_color)
+reset_screen()
+```
 
 ## Controller
