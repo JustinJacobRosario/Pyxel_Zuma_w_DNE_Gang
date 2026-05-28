@@ -4,6 +4,32 @@ This serves as a **reference guide** regarding the functions involved within our
 as we go on with this project.
 
 ## Model
+### Phase 2 Model
+Here are the variables used in the `__init__` part:
+```py
+self._width  # The width of the screen
+self._height  # The height of the screen
+self._is_game_over  # Sets to true if game over conds satisfied
+self._dimensions  # ? still dont know
+self._grid_size  # ? still dont know
+self._total_grid_height  # ?
+self._path  # The coordinates of the tiles
+self._start_row  # Row of the first appearance of enemy
+self._start_col  # Col of the first appearance of enemy
+self._enemies  # The types of enemies to appear
+self._rounds  # ?
+self._current_round  # Tracks the current round
+self._displayed enemies  # ?
+self._tick  # ?
+self._gun_coords  # The coordinate of the shooter
+self._pending_bullets  # ?
+self._displayed_bullets  # ?
+self._next_color  # ?
+self._exp  # Tracks the exp
+self._hp  # Tracks the hp
+```
+Those with `?` comments are variables I cannot identify yet, please help me add details
+to these.
 
 ## View
 
