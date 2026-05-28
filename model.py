@@ -7,6 +7,7 @@ from typing import Protocol
 from enum import Enum, auto
 from enemies import Color
 from random import choice
+import json
 
 
 # directions for the wasd directions of the bullet
@@ -34,8 +35,8 @@ class Phase1Model(ABC):
         self._path = [(3, i) for i in range(14)]
         self._start_row = self._path[0][0]
         self._start_col = self._path[0][1]
-        self._enemies = [[OrangeEnemy() for _ in range(5)]]
-        self._rounds = len(self._enemies)
+        self._rounds = 2
+        self._enemies = [[OrangeEnemy() for _ in range(5)] for _ in range(self._rounds)]
         self._current_round = 1
 
         self._displayed_enemies = []
@@ -48,6 +49,8 @@ class Phase1Model(ABC):
         self._next_color = 7
         self._exp = 0
         self._hp = 2
+
+        self._data = self.fetch_json_data()
         
     @property
     def width(self):
@@ -180,6 +183,7 @@ class Phase1Model(ABC):
         self._displayed_bullets = [b for b in self._displayed_bullets if not b.is_used]
     
     # * Must check if a bug may occur in process_shot
+    # Implement spatial hash
     def process_shot(self):
         if self._pending_bullets:
             self._next_color = self.pending_bullets[-1].color.value
@@ -224,6 +228,13 @@ class Phase1Model(ABC):
                 if bullet.row < -1:
                     bullet.is_used = True
 
+    def fetch_json_data(self):
+        with open("settings.json", 'r') as file:
+            data = json.load(file)
+
+        return data
+
+
 # TODO: Add tower feature and get details from setting.json
 class Phase2Model(Phase1Model):
     def __init__(self):
@@ -233,10 +244,10 @@ class Phase2Model(Phase1Model):
             (4, 13), (3, 13), (3, 12), (3, 11), (3, 10), (3, 9), (3, 8), (3, 7), (3, 6), (3, 5), (3, 4), (3, 3), (3, 2), (3, 1),
             (2, 1), (1, 1), (1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7), (1, 8), (1, 9), (1, 10), (1, 11), (1, 12), (1, 13), (1, 14)]
         self._gun_coords = (7, 4)
+        self._rounds = self._data["enemies"]
         self._enemies = [
-            [(choice([OrangeEnemy(), RedEnemy()])) for _ in range(5)],
-            [(choice([OrangeEnemy(), RedEnemy()])) for _ in range(5)]]
-        self._rounds = len(self._enemies)
+            [(choice([OrangeEnemy(), RedEnemy()])) for _ in range(5)] for _ in range(self.rounds)]
+        self._hp = self._data["lives"]
 
     @property
     def allowed_dirs(self):
@@ -263,5 +274,3 @@ class Phase2Model(Phase1Model):
                         bullet.col += 0.2
                         if self._width < bullet.row:
                             bullet.is_used = True
-
-
