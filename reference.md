@@ -59,4 +59,13 @@ display_cursor(next_color)
 reset_screen()
 ```
 
+**Questions:**
+a. How was `self._cell_size` obtained?
+
+Hmm, I think we could modify the name into `cell_length`(?) or `tile_length`
+
+**Answer:** Divide the width size $w$ by the number of tiles per column, which can be denoted by $t_C$. Then we represent the outcome of the tile length as $t_{\text{length}}$
+
+$$t_{\text{length}} = \frac{w}{t_C}$$
+
 ## Controller
