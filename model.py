@@ -11,7 +11,7 @@ import json
 
 from towers import Tower
 from enemies import Enemy, OrangeEnemy, RedEnemy, BlueEnemy
-from bullets import Bullet, OrangeBullet, RedBullet, BlueBullet
+from bullets import Bullet
 from player import Dir
 
 class Phase1Model(ABC):
@@ -35,7 +35,7 @@ class Phase1Model(ABC):
         self._tick = 0
         self._gun_coords = (7, 5) # gun position (col, row)
 
-        self._pending_bullets = [choice([OrangeBullet(), RedBullet(), BlueBullet()])] # always needs a bullet in the pending list to refer the next color sa cursor
+        self._pending_bullets: Color = choice([Color.Orange, Color.Red, Color.Yellow]) # always needs a bullet in the pending list to refer the next color sa cursor
         
         self._displayed_bullets = []
         self._next_color = 7
@@ -199,7 +199,7 @@ class Phase1Model(ABC):
         attribute by 1.
         """
         if self._pending_bullets:
-            self._next_color = self.pending_bullets[-1].color.value
+            self._next_color = self.pending_bullets.value
         else:
             self._next_color = Color.Black.value
 
@@ -233,8 +233,8 @@ class Phase1Model(ABC):
         appended to the `_displayed_bullets` list.
         """
         if self._pending_bullets:
-            bullet = self._pending_bullets.pop()
-            self._pending_bullets.append(choice([OrangeBullet(), RedBullet(), BlueBullet()]))
+            bullet = self._pending_bullets
+            self._pending_bullets.append(choice([Color.Orange, Color.Yellow, Color.Red]))
             bullet.direction = dir
 
             # ! Refactor this code and make it change thru `x` and `y` attribs

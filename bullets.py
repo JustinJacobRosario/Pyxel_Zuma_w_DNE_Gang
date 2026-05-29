@@ -4,18 +4,14 @@ from enum import Enum
 from abc import ABC, abstractmethod
 from player import Dir
 
-
-
 class Bullet(ABC):
-	def __init__(self, x, y, radius):
+	def __init__(self, x, y):
 		self._x = x
 		self._y = y
-		self._radius = radius
+		self._radius = 5
 		self._color = Color.Orange
 		self._is_used = False
 
-		# TODO: Modify the direction and change it using coords
-		# ? Or better else remove it and make it update using model func
 		self._direction = Dir.UP
 
 	@property
@@ -50,6 +46,10 @@ class Bullet(ABC):
 	def y(self, value):
 		self._y = value
 
+	@color.setter
+	def color(self, value):
+		self._color = value
+
 	@radius.setter
 	def radius(self, value):
 		self._radius = value
@@ -61,23 +61,3 @@ class Bullet(ABC):
 	@direction.setter
 	def direction(self, value):
 		self._direction = value
-
-class OrangeBullet(Bullet):
-	def __init__(self, x = 0, y = 0, radius = 5):
-		super().__init__(x, y, radius)
-		self._color = Color.Orange
-
-class RedBullet(Bullet):
-	def __init__(self, x = 0, y = 0, radius = 5):
-		super().__init__(x, y, radius)
-		self._color = Color.Red
-
-class BlueBullet(Bullet):
-	def __init__(self, x = 0, y = 0, radius = 5):
-		super().__init__(x, y, radius)
-		self._color = Color.Blue
-
-	
-	
-	
-	
