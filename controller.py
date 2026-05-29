@@ -107,6 +107,13 @@ class Controller:
             model.cell_size,
             model.displayed_enemies)
 
+        view.display_gun(
+            model.height, 
+            model.total_grid_height, 
+            model.cell_size, 
+            model.gun_coords[0], 
+            model.gun_coords[1])
+
         view.display_bullets(
             model.height, 
             model.total_grid_height, 
@@ -115,12 +122,6 @@ class Controller:
             model.cell_size, 
             model.displayed_bullets)
 
-        view.display_gun(
-            model.height, 
-            model.total_grid_height, 
-            model.cell_size, 
-            model.gun_coords[0], 
-            model.gun_coords[1])
 
         view.display_text(
             model.current_round, 
