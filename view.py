@@ -120,6 +120,23 @@ class View:
         pyxel.rect(x, y, btn_w, btn_h, 7)
         pyxel.text(x + 15, y + 11, f"PRESS SPACE TO START ROUND {current_round}", 0)
 
+    def display_tower_selection(self, width, height, tower_options: List[type[Tower]], selected_tower, cell_size):
+        btn_size = cell_size
+        padding = 10
+        total_width = len(tower_options) * (btn_size + padding)
+        start_x = (width - total_width) // 2  # center buttons horizontally
+        btn_y = height - btn_size - padding   # anchor to bottom
+
+        for i, tower_class in enumerate(tower_options):
+            btn_x = start_x + i * (btn_size + padding)
+
+            border_color = Color.White if tower_class == selected_tower else Color.Yellow # highlight selected tower
+            pyxel.rectb(btn_x, btn_y, btn_size, btn_size, border_color) 
+            pyxel.rect(btn_x + 1, btn_y + 1, btn_size - 2, btn_size - 2, 5)
+
+            pyxel.text(btn_x + 4, btn_y + 6, tower_class.__name__[:3], 7) # tower name
+            pyxel.text(btn_x + 4, btn_y + 14, f"{tower_class._exp_cost}EXP", 10) # tower cost
+
     def display_placed_towers(self, height, total_grid_height, cell_size, towers: list[Tower]):
         vert_offset = (height - total_grid_height) // 2
 

@@ -1,8 +1,11 @@
 from model import (Phase1Model, Phase2Model)
 from player import Dir
+from towers import RainbowTower
 from view import View
 import pyxel
 import sounds
+
+AVAILABLE_TOWERS = [RainbowTower]
 
 class Controller:
     def __init__(self, model: Phase1Model, view: View):
@@ -50,9 +53,6 @@ class Controller:
         view = self._view
 
         view.reset_screen()
-
-        if model.waiting_for_start:
-            view.display_start_button(model.width, model.height, model.current_round)
 
         view.display_map(
             model.height, 
@@ -105,6 +105,11 @@ class Controller:
             25)
         
         view.display_cursor(model.next_color)
+
+        if model.waiting_for_start:
+            view.display_start_button(model.width, model.height, model.current_round)
+        # temp until model implemented
+        # view.display_tower_selection(model.width, model.height, AVAILABLE_TOWERS, model.selected_tower, model.cell_size)
 
     def start_game(self):
         model = self._model
