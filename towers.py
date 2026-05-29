@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
-from bullets import Bullet, OrangeBullet, RedBullet, BlueBullet
+from bullets import Bullet
 from enemies import Color
 import random
 
-BULLET_MAP = {
-    Color.Orange: OrangeBullet,
-    Color.Red: RedBullet,
-    Color.Blue: BlueBullet
-}
+# BULLET_MAP = {
+#     Color.Orange: OrangeBullet,
+#     Color.Red: RedBullet,
+#     Color.Blue: BlueBullet
+# }
 
 class Tower(ABC):
     _exp_cost: int = 0

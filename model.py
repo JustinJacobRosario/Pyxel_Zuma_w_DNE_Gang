@@ -233,13 +233,16 @@ class Phase1Model(ABC):
         appended to the `_displayed_bullets` list.
         """
         if self._pending_bullets:
-            bullet = self._pending_bullets
-            self._pending_bullets.append(choice([Color.Orange, Color.Yellow, Color.Red]))
+            color = self._pending_bullets
+            self._pending_bullets = choice([Color.Orange, Color.Red, Color.Blue])
+
+            x_coord = self._gun_coords[1]
+            y_coord = self._gun_coords[0]
+
+            bullet = Bullet(x_coord, y_coord)
+            bullet.color = color
             bullet.direction = dir
 
-            # ! Refactor this code and make it change thru `x` and `y` attribs
-            bullet.y = self._gun_coords[0]
-            bullet.x = self._gun_coords[1]
             self._displayed_bullets.append(bullet)
 
     def move_bullet(self):
