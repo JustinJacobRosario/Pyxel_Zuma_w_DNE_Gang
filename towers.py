@@ -4,9 +4,9 @@ from enemies import Color
 import random
 
 BULLET_MAP = {
-    Color.Orange = OrangeBullet,
-    Color.Red = RedBullet,
-    Color.Blue = BlueBullet
+    Color.Orange: OrangeBullet,
+    Color.Red: RedBullet,
+    Color.Blue: BlueBullet
 }
 
 class Tower(ABC):

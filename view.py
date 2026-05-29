@@ -1,5 +1,5 @@
 from collections.abc import Sequence
-from typing import Protocol
+from typing import List, Protocol
 import pyxel
 from random import randint
 from enum import Enum
@@ -124,13 +124,10 @@ class View:
         vert_offset = (height - total_grid_height) // 2
 
         for tower in towers:
-            x = tower.col * cell_size
-            y = vert_offset + (tower.row * cell_size)
+            x = int(tower.col * cell_size)
+            y = vert_offset + int(tower.row * cell_size)
 
-            mid_x = x + (cell_size//2)
-            mid_y = y + (cell_size//2)
-
-            pyxel.circ(mid_x, mid_y, cell_size // 4, 12)
+            pyxel.rect(x, y, cell_size, cell_size, 10) # temp while we dont have tower sprites
 
     def get_clicked_cell(self, height, total_grid_height, cell_size):
         # use for placing down towers
