@@ -203,6 +203,14 @@ class Phase1Model(ABC):
     # * Must check if a bug may occur in process_shot
     # Implement spatial hash
     def process_shot(self):
+        """
+        Checks the list of displayed bullets and displayed enemies if there exists
+        a pair that intersects. If there is an intersection, it updates the attribute
+        `is_used` of the bullet. And updates the `current_health` attribute of the enemy
+        by decrementing it by 1. Finally, since it intersects it increases the `exp`
+        attribute by 1.
+        """
+        
         if self._pending_bullets:
             self._next_color = self.pending_bullets[-1].color.value
         else:
