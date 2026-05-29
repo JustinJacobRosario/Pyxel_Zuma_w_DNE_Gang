@@ -134,18 +134,6 @@ class Phase1Model(ABC):
     def towers_locs(self):
         return self._tower_locs
     
-    def place_tower(self, tower: Tower, col, row):
-        # 
-        if (row, col) in self._path:
-            # that location is the path
-            return
-        if any(tower.col == col and tower.row == row for tower in self._tower_locs):
-            # tower already exists in that location
-            return
-        if self._exp < tower.exp_cost:
-            self._exp -= tower.exp_cost
-            self.towers_locs.append(tower)
-    
     def start_round(self):
         self._waiting_for_start = False
 
@@ -289,6 +277,19 @@ class Phase2Model(Phase1Model):
     @property
     def allowed_dirs(self):
         return [Dir.UP, Dir.DOWN, Dir.LEFT, Dir.RIGHT]
+
+    def place_tower(self, tower_class: type[Tower], col, row):
+        # 
+        if (row, col) in self._path:
+            # that location is the path
+            return
+        if any(tower.col == col and tower.row == row for tower in self._tower_locs):
+            # tower already exists in that location
+            return
+        tower = tower_class(col, row)
+        if self._exp < tower.exp_cost:
+            self._exp -= tower.exp_cost
+            self._tower_locs.append(tower)
 
     def upgrade_tower(self, tower: Tower): # temp: until a phase 3 model is made since no tower upgrades in phase 2
         if self._exp >= tower._upgrade_cost and not tower.upgraded:
