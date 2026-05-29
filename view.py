@@ -67,6 +67,11 @@ class View:
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
             return Dir.UP
         return None
+    
+    def cursor_coords(self):
+        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            x, y = pyxel.mouse_x, pyxel.mouse_y
+            return x, y
 
     def is_gun_wasd_clicked(self):
         if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_W):
@@ -87,8 +92,8 @@ class View:
 
         for bullet in bullets:
             if not bullet.is_used:
-                x = bullet.col * cell_size
-                y = vert_offset + (bullet.row * cell_size)
+                x = bullet.y * cell_size
+                y = vert_offset + (bullet.x * cell_size)
 
                 mid_x = x + (cell_size//2)
                 mid_y = y + (cell_size//2)
