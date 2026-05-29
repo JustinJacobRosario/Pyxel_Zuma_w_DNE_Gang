@@ -5,3 +5,6 @@ def shoot_sound():
 
 def shot_enemy_sound():
     pyxel.play(0,1)
+
+def play_music():
+    pyxel.playm(0,0, loop=True)

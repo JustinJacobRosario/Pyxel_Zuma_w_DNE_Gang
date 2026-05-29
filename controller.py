@@ -13,6 +13,8 @@ class Controller:
         model = self._model
         view = self._view
 
+        
+
         # Quits if 'q' is pressed
         model.will_quit()
         if model.waiting_for_start:

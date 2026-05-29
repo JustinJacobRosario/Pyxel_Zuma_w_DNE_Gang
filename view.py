@@ -8,6 +8,7 @@ from enemies import Color, Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet
 from towers import Tower
 from player import Dir
+import sounds
 
 class View:
     def __init__(self) -> None:
@@ -17,6 +18,7 @@ class View:
         pyxel.init(width, height, title="zuma", fps=30)
         pyxel.mouse(False)
         pyxel.load("tilemap_sprites.pyxres")
+        sounds.play_music()
 
     # ? Can we reduce the parameters here
     def display_map(self, height, total_grid_height, row_count, 
@@ -169,10 +171,10 @@ class View:
                     tl_x = c * cell_size
                     tl_y = vert_offset + (r * cell_size)
     
-                    # get tile_coord from pyxel editor
+                    # tile_coord from pyxel editor
                     tile_x, tile_y = pyxel.tilemap(0).pget(c * 2, r * 2)
     
-                    # Convert to pixel coords in the image bank
+                    # convert to pixel coords in the image bank
                     u = tile_x * 8
                     v = tile_y * 8
     
@@ -181,17 +183,17 @@ class View:
     def display_border_panels(self, height, total_grid_height):
         vert_offset = (height - total_grid_height) // 2  + 45
         tile_side = 16
-        scale = 7  # renders as 112px, covers the 108px strip
+        scale = 7  # bigger tiless
 
-        u, v = 32, 48  # your border sprite coords — adjust to match
+        u, v = 32, 48  # sprite coords
 
         tiles_needed = (1080 // (tile_side * scale)) + 2
 
         for i in range(tiles_needed):
             x = i * tile_side * scale
 
-            # Top: fill from y=0 down to where the map actually starts
+            # top line
             pyxel.blt(x, 0 + 45, 0, u, v, tile_side, tile_side, scale=scale)
 
-            # Bottom: fill from where the map ends to bottom of screen
+            # bottom line
             pyxel.blt(x, vert_offset + total_grid_height, 0, u, v, tile_side, tile_side, scale=scale)
