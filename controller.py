@@ -2,6 +2,7 @@ from model import (Phase1Model, Phase2Model)
 from player import Dir
 from view import View
 import pyxel
+import sounds
 
 class Controller:
     def __init__(self, model: Phase1Model, view: View):
@@ -23,7 +24,10 @@ class Controller:
             if not self._model.is_game_over:
                 model.inc_tick()
                 model.move_bullet()
-                model.process_shot()
+                is_shot = model.process_shot()
+                if is_shot:
+                    sounds.shot_enemy_sound()
+
 
                 for enemy in list(model.displayed_enemies):
                     model.move_enemy(enemy)
@@ -32,6 +36,7 @@ class Controller:
                 wasd_val = view.is_gun_wasd_clicked()
 
                 if wasd_val is not None:
+                    sounds.shoot_sound()
                     model.shoot(wasd_val)
 
             model.delete_enemy_out_of_bounds()

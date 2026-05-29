@@ -227,6 +227,8 @@ class Phase1Model(ABC):
                     enemy.current_health -= 1
                     
                     self._exp += 1
+                    return True
+        return False
 
     def shoot(self, dir: Dir):
         if self._pending_bullets:
