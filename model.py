@@ -290,6 +290,11 @@ class Phase2Model(Phase1Model):
     def allowed_dirs(self):
         return [Dir.UP, Dir.DOWN, Dir.LEFT, Dir.RIGHT]
 
+    def upgrade_tower(self, tower: Tower): # temp: until a phase 3 model is made since no tower upgrades in phase 2
+        if self._exp >= tower.upgrade_cost and not tower.upgraded:
+            self._exp -= tower.upgrade_cost
+            tower.upgrade()
+
     def move_bullet(self):
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
