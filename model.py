@@ -216,8 +216,8 @@ class Phase1Model(ABC):
             self._next_color = Color.Black.value
 
         for bullet in self._displayed_bullets:
-            b_col = bullet.col
-            b_row = bullet.row
+            b_col = bullet.y
+            b_row = bullet.x
 
             # bullet radius in pixels
             r1 = bullet.radius / self.cell_size 
@@ -250,8 +250,8 @@ class Phase1Model(ABC):
             bullet.direction = dir
 
             # ! Refactor this code and make it change thru `x` and `y` attribs
-            bullet.col = self._gun_coords[0]
-            bullet.row = self._gun_coords[1]
+            bullet.y = self._gun_coords[0]
+            bullet.x = self._gun_coords[1]
             self._displayed_bullets.append(bullet)
 
     def move_bullet(self):
@@ -261,8 +261,8 @@ class Phase1Model(ABC):
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
 
-                bullet.row -= 0.2
-                if bullet.row < -1:
+                bullet.x -= 0.2
+                if bullet.x < -1:
                     bullet.is_used = True
 
     def fetch_json_data(self):
@@ -301,18 +301,25 @@ class Phase2Model(Phase1Model):
 
                 match bullet.direction:
                     case Dir.UP:
-                        bullet.row -= 0.2
-                        if bullet.row < -1:
+                        bullet.x -= 0.2
+                        if bullet.x < -1:
                             bullet.is_used = True
                     case Dir.DOWN:
-                        bullet.row += 0.2
-                        if self._dimensions[1] < bullet.row: # out-of-bounds
+                        bullet.x += 0.2
+                        if self._dimensions[1] < bullet.x: # out-of-bounds
                             bullet.is_used = True
                     case Dir.LEFT:
-                        bullet.col -= 0.2
-                        if bullet.col < -1:
+                        bullet.y -= 0.2
+                        if bullet.y < -1:
                             bullet.is_used = True
                     case Dir.RIGHT:
-                        bullet.col += 0.2
-                        if self._width < bullet.row:
+                        bullet.y += 0.2
+                        if self._width < bullet.x:
                             bullet.is_used = True
+
+class Phase3Model(Phase1Model):
+    def __init__(self):
+        super().__init__()
+
+    # TODO: Make it possible to shoot using the mouse
+    # TODO: Bonus -> combine it with WASD keys
