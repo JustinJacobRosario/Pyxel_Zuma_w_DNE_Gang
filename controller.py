@@ -21,7 +21,7 @@ class PlacementState:
         self.selected_tower = None
 
 class Controller:
-    def __init__(self, model: Phase1Model, view: View):
+    def __init__(self, model: Phase2Model, view: View):
         self._model = model
         self._view = view
         self._tower_placement = PlacementState()
@@ -30,10 +30,9 @@ class Controller:
         model = self._model
         view = self._view
 
-        
-
         # Quits if 'q' is pressed
         model.will_quit()
+
         if model.waiting_for_start:
             if view.is_start_pressed(model.width, model.height):
                 model.start_round()
@@ -43,7 +42,12 @@ class Controller:
             clicked_tower = view.get_tower_selection(model.width, model.height, AVAILABLE_TOWERS, model.cell_size)
             if clicked_tower:
                 self._tower_placement.select(clicked_tower)
-            cell = view.get_clicked_cell(model.height, model.total_grid_height, model.cell_size)
+            else:
+                cell = view.get_clicked_cell(model.height, model.total_grid_height, model.cell_size)
+                if cell and self._tower_placement.selected_tower:
+                    col, row = cell
+                    model.place_tower(self._tower_placement.selected_tower, col, row)
+                    self._tower_placement.reset()
 
             return # freezes rendering of enemies/bullets
         

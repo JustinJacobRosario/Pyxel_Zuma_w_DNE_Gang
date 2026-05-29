@@ -280,6 +280,8 @@ class Phase2Model(Phase1Model):
 
     def place_tower(self, tower_class: type[Tower], col, row):
         # 
+        if tower_class is None:
+            return
         if (row, col) in self._path:
             # that location is the path
             return
@@ -287,7 +289,7 @@ class Phase2Model(Phase1Model):
             # tower already exists in that location
             return
         tower = tower_class(col, row)
-        if self._exp < tower.exp_cost:
+        if self._exp >= tower.exp_cost:
             self._exp -= tower.exp_cost
             self._tower_locs.append(tower)
 
