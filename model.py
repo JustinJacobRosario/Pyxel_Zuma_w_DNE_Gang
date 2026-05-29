@@ -291,8 +291,8 @@ class Phase2Model(Phase1Model):
         return [Dir.UP, Dir.DOWN, Dir.LEFT, Dir.RIGHT]
 
     def upgrade_tower(self, tower: Tower): # temp: until a phase 3 model is made since no tower upgrades in phase 2
-        if self._exp >= tower.upgrade_cost and not tower.upgraded:
-            self._exp -= tower.upgrade_cost
+        if self._exp >= tower._upgrade_cost and not tower.upgraded:
+            self._exp -= tower._upgrade_cost
             tower.upgrade()
 
     def move_bullet(self):

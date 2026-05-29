@@ -1,16 +1,30 @@
 from model import (Phase1Model, Phase2Model)
 from player import Dir
-from towers import RainbowTower
+from dataclasses import dataclass
+from towers import Tower, RainbowTower
 from view import View
 import pyxel
 import sounds
 
 AVAILABLE_TOWERS = [RainbowTower]
 
+@dataclass
+class PlacementState:
+    selected_tower: type[Tower] | None = None
+    def select(self, tower_class):
+        if self.selected_tower == tower_class:
+            self.selected_tower = None
+        else:
+            self.selected_tower = tower_class
+
+    def reset(self):
+        self.selected_tower = None
+
 class Controller:
     def __init__(self, model: Phase1Model, view: View):
         self._model = model
         self._view = view
+        self._tower_placement = PlacementState()
 
     def update(self):
         model = self._model
@@ -23,6 +37,14 @@ class Controller:
         if model.waiting_for_start:
             if view.is_start_pressed(model.width, model.height):
                 model.start_round()
+                self._tower_placement.reset()
+                return
+            
+            clicked_tower = view.get_tower_selection(model.width, model.height, AVAILABLE_TOWERS, model.cell_size)
+            if clicked_tower:
+                self._tower_placement.select(clicked_tower)
+            cell = view.get_clicked_cell(model.height, model.total_grid_height, model.cell_size)
+
             return # freezes rendering of enemies/bullets
         
         else:
@@ -108,6 +130,7 @@ class Controller:
 
         if model.waiting_for_start:
             view.display_start_button(model.width, model.height, model.current_round)
+            view.display_tower_selection(model.width, model.height, AVAILABLE_TOWERS, self._tower_placement.selected_tower, model.cell_size)
         # temp until model implemented
         # view.display_tower_selection(model.width, model.height, AVAILABLE_TOWERS, model.selected_tower, model.cell_size)
 
