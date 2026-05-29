@@ -13,6 +13,9 @@ class Bullet(ABC):
 		self._radius = radius
 		self._color = Color.Orange
 		self._is_used = False
+
+		# TODO: Modify the direction and change it using coords
+		# ? Or better else remove it and make it update using model func
 		self._direction = Dir.UP
 
 	@property
