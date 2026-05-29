@@ -324,3 +324,29 @@ class Phase3Model(Phase1Model):
 
     # TODO: Make it possible to shoot using the mouse
     # TODO: Bonus -> combine it with WASD keys
+
+    """
+    Recall that we could use the formula y = mx + b to get the next
+    point wherein the bullet will move. 
+    """
+    def move_bullet(self):
+        for bullet in self._displayed_bullets:
+            if not bullet.is_used:
+
+                match bullet.direction:
+                    case Dir.UP:
+                        bullet.x -= 0.2
+                        if bullet.x < -1:
+                            bullet.is_used = True
+                    case Dir.DOWN:
+                        bullet.x += 0.2
+                        if self._dimensions[1] < bullet.x: # out-of-bounds
+                            bullet.is_used = True
+                    case Dir.LEFT:
+                        bullet.y -= 0.2
+                        if bullet.y < -1:
+                            bullet.is_used = True
+                    case Dir.RIGHT:
+                        bullet.y += 0.2
+                        if self._width < bullet.x:
+                            bullet.is_used = True
