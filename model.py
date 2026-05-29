@@ -210,7 +210,6 @@ class Phase1Model(ABC):
         by decrementing it by 1. Finally, since it intersects it increases the `exp`
         attribute by 1.
         """
-        
         if self._pending_bullets:
             self._next_color = self.pending_bullets[-1].color.value
         else:
@@ -239,16 +238,26 @@ class Phase1Model(ABC):
         return False
 
     def shoot(self, dir: Dir):
+        """
+        Shoots the first element in `_pending_bullets` and then appends a new 
+        bullet to the list through `random.choice()`. The shot bullet's direction
+        is updated through the input parameter `dir`. Afterwards, the bullet is
+        appended to the `_displayed_bullets` list.
+        """
         if self._pending_bullets:
             bullet = self._pending_bullets.pop()
             self._pending_bullets.append(choice([OrangeBullet(), RedBullet(), BlueBullet()]))
             bullet.direction = dir
 
+            # ! Refactor this code and make it change thru `x` and `y` attribs
             bullet.col = self._gun_coords[0]
             bullet.row = self._gun_coords[1]
             self._displayed_bullets.append(bullet)
 
     def move_bullet(self):
+        """
+        Updates the coordinate of the bullet based on its coordinates.
+        """
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
 
