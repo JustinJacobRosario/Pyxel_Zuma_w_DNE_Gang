@@ -106,10 +106,13 @@ class View:
         x = gun_col * cell_size
         y = vert_offset + (gun_row * cell_size)
 
-        mid_x = x + (cell_size//2)
-        mid_y = y + (cell_size//2)
+        tile_side = 16
+        scale = cell_size // tile_side + 1 
+        offset = (cell_size - tile_side) // 2  # to center it in the cell
 
-        pyxel.circ(mid_x, mid_y, cell_size // 4, 0)
+        u, v = 48, 32  # gun sprite coords
+
+        pyxel.blt(x + offset, y + offset, 0, u, v, tile_side, tile_side, scale=scale, colkey=1)
 
     def display_text(self, current_round, rounds, hp, exp, font_addrss, size):
         font = pyxel.Font(font_addrss, size)
