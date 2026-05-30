@@ -168,6 +168,10 @@ class Phase1Model(ABC):
     def towers_locs(self):
         return self._tower_locs
     
+    @property
+    def transformed_gun_coords(self):
+        return self.transform_gun_coords(*self._gun_coords)
+    
     def start_round(self):
         self._waiting_for_start = False
 
@@ -286,6 +290,9 @@ class Phase1Model(ABC):
             x_coord = self._gun_coords[1]
             y_coord = self._gun_coords[0]
 
+            # x_coord = self.transformed_gun_coords[0]
+            # y_coord = self.transformed_gun_coords[1]
+
             bullet = Bullet(x_coord, y_coord)
             bullet.color = color
             bullet.direction = dir
@@ -302,6 +309,16 @@ class Phase1Model(ABC):
                 bullet.x -= 0.2
                 if bullet.x < -1:
                     bullet.is_used = True
+
+    def transform_gun_coords(self, gun_col: int, gun_row: int):
+        vert_offset = (self.height - self.total_grid_height) // 2
+
+        x = gun_col * self.cell_size
+        y = vert_offset + (gun_row * self.cell_size)
+
+        # print(x, y)
+
+        return x, y
 
     def fetch_json_data(self):
         with open("settings.json", 'r') as file:

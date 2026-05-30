@@ -114,6 +114,12 @@ class Controller:
             model.gun_coords[0], 
             model.gun_coords[1])
 
+        # view.display_gun(
+        #     model.transformed_gun_coords[0],
+        #     model.transformed_gun_coords[1],
+        #     model.cell_size
+        # )
+
         view.display_bullets(
             model.height, 
             model.total_grid_height, 
