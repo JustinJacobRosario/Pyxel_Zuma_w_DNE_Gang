@@ -33,6 +33,9 @@ class Controller:
         # Quits if 'q' is pressed
         model.will_quit()
 
+        # Turns music on or off if "m" is pressed
+        view.switch_music()
+
         if model.waiting_for_start:
             model.transform_gun_coords(*model.gun_coords)
             if view.is_start_pressed(model.width, model.height):
@@ -140,8 +143,8 @@ class Controller:
         view.display_cursor(model.next_color)
 
         if model.waiting_for_start:
-            view.display_start_button(model.width, model.height, model.current_round)
-            view.display_tower_selection(model.width, model.height, AVAILABLE_TOWERS, self._tower_placement.selected_tower, model.cell_size)
+            view.display_start_button(model.width, model.height, model.current_round, "UbuntuMono-Regular.ttf", 17)
+            view.display_tower_selection(model.width, model.height, AVAILABLE_TOWERS, self._tower_placement.selected_tower, model.cell_size, "UbuntuMono-Regular.ttf", 20)
         # temp until model implemented
         # view.display_tower_selection(model.width, model.height, AVAILABLE_TOWERS, model.selected_tower, model.cell_size)
 

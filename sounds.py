@@ -8,3 +8,6 @@ def shot_enemy_sound():
 
 def play_music():
     pyxel.playm(0,0, loop=True)
+
+def stop_music():
+    pyxel.stop()

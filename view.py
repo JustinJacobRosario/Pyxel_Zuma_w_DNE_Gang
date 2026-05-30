@@ -20,6 +20,14 @@ class View:
         pyxel.load("tilemap_sprites.pyxres")
         sounds.play_music()
 
+    def switch_music(self):
+        if pyxel.btnp(pyxel.KEY_M):
+            if pyxel.play_pos(0) is not None:  # if music is currently playing
+                sounds.stop_music()
+            else:
+                sounds.play_music()
+    
+
     # ? Can we reduce the parameters here
     def display_map(self, height, total_grid_height, row_count, 
                     col_count, cell_size):
@@ -112,24 +120,31 @@ class View:
 
     def display_text(self, current_round, rounds, hp, exp, font_addrss, size):
         font = pyxel.Font(font_addrss, size)
+
+        pyxel.rect(40, 15, 520, 40, 0) # background for text
         pyxel.text(50, 20, f"ROUND: {current_round}/{rounds}", 7, font)
         pyxel.text(250, 20, f"Health: {hp}", 7, font)
         pyxel.text(450, 20, f"EXP: {exp}", 7, font)
 
-    def display_start_button(self, width, height, current_round):
+    def display_start_button(self, width, height, current_round, font_addrss, size):
         btn_w, btn_h = 150, 50
         x = width - btn_w - 25
         y = height - btn_h - 40
 
-        pyxel.rect(x, y, btn_w, btn_h, 7)
-        pyxel.text(x + 15, y + 11, f"PRESS SPACE TO START ROUND {current_round}", 0)
+        font = pyxel.Font(font_addrss, size)
 
-    def display_tower_selection(self, width, height, tower_options: List[type[Tower]], selected_tower, cell_size):
+        pyxel.rect(x, y, btn_w, btn_h, 0)
+        pyxel.text(x + 10, y + 11, f"PRESS SPACE TO", 7, font)
+        pyxel.text(x + 10, y + 25, f"START ROUND {current_round}", 7, font)
+
+    def display_tower_selection(self, width, height, tower_options: List[type[Tower]], selected_tower, cell_size, font_addrss, size):
         btn_size = cell_size
         padding = 30
         total_width = len(tower_options) * (btn_size + padding)
         start_x = (width - total_width) // 2  # center buttons horizontally
         btn_y = height - btn_size - padding   # anchor to bottom
+
+        font = pyxel.Font(font_addrss, size)
 
         for i, tower_class in enumerate(tower_options):
             btn_x = start_x + i * (btn_size + padding)
@@ -138,8 +153,8 @@ class View:
             pyxel.rectb(btn_x, btn_y, btn_size, btn_size, border_color) 
             pyxel.rect(btn_x + 1, btn_y + 1, btn_size - 2, btn_size - 2, 5)
 
-            pyxel.text(btn_x + 4, btn_y + 6, tower_class.__name__[:3], 7) # tower name
-            pyxel.text(btn_x + 4, btn_y + 14, f"{tower_class._exp_cost} EXP", 10) # tower cost
+            pyxel.text(btn_x + 4, btn_y + 6, tower_class.__name__[:3], 7, font) # tower name
+            pyxel.text(btn_x + 4, btn_y + 25, f"{tower_class._exp_cost} EXP", 10, font) # tower cost
 
     def get_tower_selection(self, width, height, tower_options: List[type[Tower]], cell_size):
         if not pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
