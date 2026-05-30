@@ -132,13 +132,15 @@ class Controller:
             model.displayed_bullets)
 
 
-        view.display_text(
+        view.display_stats_text(
             model.current_round, 
             model.rounds, 
             model.hp, 
             model.exp, 
             "UbuntuMono-Regular.ttf", 
             25)
+        
+        view.display_keybinds_text(model.height, "UbuntuMono-Regular.ttf", 15)
         
         view.display_cursor(model.next_color)
 

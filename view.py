@@ -118,13 +118,26 @@ class View:
 
         pyxel.blt(x, y, 0, u, v, tile_side, tile_side, scale=scale, colkey=1)
 
-    def display_text(self, current_round, rounds, hp, exp, font_addrss, size):
+    def display_stats_text(self, current_round, rounds, hp, exp, font_addrss, size):
         font = pyxel.Font(font_addrss, size)
 
         pyxel.rect(40, 15, 520, 40, 0) # background for text
         pyxel.text(50, 20, f"ROUND: {current_round}/{rounds}", 7, font)
         pyxel.text(250, 20, f"Health: {hp}", 7, font)
         pyxel.text(450, 20, f"EXP: {exp}", 7, font)
+
+    def display_keybinds_text(self, height, font_addrss, size):
+        font = pyxel.Font(font_addrss, size)
+
+        y = height - 90
+
+        pyxel.rect(10, y - 10, 200, 90, 0) # background for text
+
+        pyxel.text(20, y, "KEYBINDS:", 7, font)
+        pyxel.text(20, y + 15, "SPACE: Start Round", 7, font)
+        pyxel.text(20, y + 30, "M: Toggle Music", 7, font)
+        pyxel.text(20, y + 45, "WASD or Click: Move Gun", 7, font)
+        pyxel.text(20, y + 60, "Q: Quit Game", 7, font)
 
     def display_start_button(self, width, height, current_round, font_addrss, size):
         btn_w, btn_h = 150, 50
