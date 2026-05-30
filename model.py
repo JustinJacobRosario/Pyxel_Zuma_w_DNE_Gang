@@ -15,6 +15,40 @@ from bullets import Bullet
 from player import Dir
 
 class Phase1Model(ABC):
+    '''
+    Base Model
+
+    Grid Coords and Pixel Coords:
+    
+    Pixel-based Attributes:
+    `cell_size` cell side length in pixels
+    `total_grid_height` total height of the map in pixels
+    `bullet.radius` and `enemy.radius` are in pixels, used for collision detection
+
+    Grid-based Attributes:
+    `path` list of grid coords (col, row) that the enemies will pass through consecutively
+    `gun_coords` grid coord (col, row) of the gun
+    
+    The following attributes are in grid_coords within their class attributes:
+    `tower_locs` list of towers with their grid coords (col, row)
+    `enemies` list of enemies with their grid coords (col, row) and other attributes
+    `displayed_enemies` list of enemies that are currently displayed on the screen
+    `displayed_bullets` list of bullets that are currently displayed on the screen
+    `pending_bullets` list of bullets that are not yet displayed on the screen
+
+    Other Attributes:
+    `tick` basically the number of times the update function is called, used to record how many frames have passed
+    `exp` experience points
+    `hp` health points
+    `rounds` number of rounds in the game
+    `current_round` current round number
+    `waiting_for_start` indicates if the game is waiting for the player to start the next round, used to pause the game before the next round starts
+    `next_color` the color of the next bullet
+    `is_game_over` indicates if the game is over
+    `allowed_dirs` the allowed shooting directions in phase1
+
+    '''
+    
     def __init__(self, width: int = 1080, height: int = 720):
         self._width: int = width
         self._height: int = height
@@ -154,16 +188,26 @@ class Phase1Model(ABC):
                 self._waiting_for_start = True # pause between rounds
 
     def display_next_enemy(self):
+
         if (self._tick%50 == 0) and (len(self._enemies[self._current_round - 1]) != 0):
             self._displayed_enemies.append(self._enemies[self._current_round - 1].pop())
             
     def move_enemy(self, enemy: Enemy):
+        '''
+        Move enemy using the progress attribute of the enemy
+
+        `progress` 
+        - the whole number part is the current path indx the enemy is at
+        - the decimal part is the percent progress towards the next path coord
+        e.g. progress = 2.1 means it is currently at index path[2] and it needs to cover 90% more distance to go to path[3]
+
+        it incremenents by the val of the walk_speed per frame to smoothly translate from path[n] to path[n+1]
+        if the enemy passes the last path coord, enemy health will be 0 to clear it and hp will be decremented
+        '''
+
         path = self._path
 
         enemy.progress += enemy.walk_speed 
-            # progress : whole num is yung index ng current grid
-            #            decimal num is yung percentage ng grid length to cover before going to the next grid
-            #            e.g. lets say nasa 4th indexed grid coord na yung enemy, then nasa gitna sya ng grid, then progress = 4.5 since 50% pa need icover bago pumunta sa next grid
         
         current_path_idx = int(enemy.progress)
         next_path_idx = current_path_idx + 1
@@ -185,6 +229,9 @@ class Phase1Model(ABC):
         enemy.col = p1[1] + (p2[1] - p1[1]) * percent
 
     def delete_enemy_out_of_bounds(self):
+        '''
+        Clear dead enemies and used bullets
+        '''
         self._displayed_enemies = [e for e in self._displayed_enemies if e.current_health > 0]
         self._displayed_bullets = [b for b in self._displayed_bullets if not b.is_used]
     

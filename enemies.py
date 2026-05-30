@@ -21,6 +21,14 @@ class Color(Enum):
 	Peach = 15
 
 class Enemy(ABC):
+	"""
+	Base enemy
+	Position is tracked in grid space (col, row)
+	Coordinates are floats so movement will be smooth
+	Radius in pixels, usually used for collision detected
+	`progress` check move_enemy() in model.py for explanation
+	`next_idx` tracks which path indx to go next
+	"""
 	def __init__(self, start_col, start_row, radius):
 		self._walk_speed = 0.1
 		self._color = Color.Orange
@@ -28,7 +36,7 @@ class Enemy(ABC):
 		self._current_health = 1
 		self._col = float(start_col)
 		self._row = float(start_row)
-		self._radius = radius
+		self._radius = radius # pixel radius, for collision detection
 		self._next_idx = 1 # what ith path coord to go next
 		self._progress = 0 # basically like ith current/previous passed path coord, then yung decimals indicates the progress towards the next path coord
 
