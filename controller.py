@@ -34,6 +34,7 @@ class Controller:
         model.will_quit()
 
         if model.waiting_for_start:
+            model.transform_gun_coords(*model.gun_coords)
             if view.is_start_pressed(model.width, model.height):
                 model.start_round()
                 self._tower_placement.reset()
@@ -58,7 +59,6 @@ class Controller:
                 is_shot = model.process_shot()
                 if is_shot:
                     sounds.shot_enemy_sound()
-
 
                 for enemy in list(model.displayed_enemies):
                     model.move_enemy(enemy)
@@ -107,18 +107,18 @@ class Controller:
             model.cell_size,
             model.displayed_enemies)
 
-        view.display_gun(
-            model.height, 
-            model.total_grid_height, 
-            model.cell_size, 
-            model.gun_coords[0], 
-            model.gun_coords[1])
-
         # view.display_gun(
-        #     model.transformed_gun_coords[0],
-        #     model.transformed_gun_coords[1],
-        #     model.cell_size
-        # )
+        #     model.height, 
+        #     model.total_grid_height, 
+        #     model.cell_size, 
+        #     model.gun_coords[0], 
+        #     model.gun_coords[1])
+
+        view.display_gun(
+            model.transformed_gun_coords[0],
+            model.transformed_gun_coords[1],
+            model.cell_size
+        )
 
         view.display_bullets(
             model.height, 

@@ -64,6 +64,7 @@ class Phase1Model(ABC):
         self._enemies = [[OrangeEnemy() for _ in range(5)] for _ in range(self._rounds)]
         self._current_round = 1
         self._waiting_for_start = True # start in waiting before round 1 starts
+        self._transformed_gun_coords = (0, 0)
 
         self._displayed_enemies = []
         self._tick = 0
@@ -121,10 +122,6 @@ class Phase1Model(ABC):
         return self._displayed_enemies
 
     @property
-    def gun_coords(self) -> bool:
-        return self._gun_coords
-
-    @property
     def tick(self):
         return self._tick
     
@@ -170,7 +167,7 @@ class Phase1Model(ABC):
     
     @property
     def transformed_gun_coords(self):
-        return self.transform_gun_coords(*self._gun_coords)
+        return self._transformed_gun_coords
     
     def start_round(self):
         self._waiting_for_start = False
@@ -316,9 +313,13 @@ class Phase1Model(ABC):
         x = gun_col * self.cell_size
         y = vert_offset + (gun_row * self.cell_size)
 
-        # print(x, y)
+        tile_side = 16
+        offset = (self.cell_size - tile_side) // 2
 
-        return x, y
+        x += offset
+        y += offset
+
+        self._transformed_gun_coords = (x, y)
 
     def fetch_json_data(self):
         with open("settings.json", 'r') as file:
