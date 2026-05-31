@@ -84,15 +84,13 @@ class Controller:
         view.reset_screen()
 
         view.display_map(
-            model.height, 
-            model.total_grid_height, 
+            model.VERT_OFFSET, 
             model.dimensions[1], 
             model.dimensions[0], 
             model.cell_size)
 
         view.display_path(
-            model.height, 
-            model.total_grid_height, 
+            model.VERT_OFFSET, 
             model.dimensions[1], 
             model.dimensions[0], 
             model.cell_size, 
@@ -103,20 +101,12 @@ class Controller:
         view.display_border_panels(model.height, model.total_grid_height)
 
         view.display_enemies(
-            model.height, 
-            model.total_grid_height, 
+            model.VERT_OFFSET, 
             model.dimensions[1], 
             model.dimensions[0], 
             model.cell_size,
             model.displayed_enemies)
-
-        # view.display_gun(
-        #     model.height, 
-        #     model.total_grid_height, 
-        #     model.cell_size, 
-        #     model.gun_coords[0], 
-        #     model.gun_coords[1])
-
+        
         view.display_gun(
             model.transformed_gun_coords[0],
             model.transformed_gun_coords[1],
@@ -124,8 +114,7 @@ class Controller:
         )
 
         view.display_bullets(
-            model.height, 
-            model.total_grid_height, 
+            model.VERT_OFFSET, 
             model.dimensions[1], 
             model.dimensions[0], 
             model.cell_size, 

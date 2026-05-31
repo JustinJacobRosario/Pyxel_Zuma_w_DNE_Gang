@@ -70,6 +70,9 @@ class Phase1Model(ABC):
         self._tick = 0
         self._gun_coords = (7, 5) # gun position (col, row)
 
+        # consts
+        self.VERT_OFFSET = (self.height - self.total_grid_height) // 2
+
         self._pending_bullets: Color = choice([Color.Orange, Color.Red, Color.Yellow]) # always needs a bullet in the pending list to refer the next color sa cursor
         
         self._displayed_bullets = []
@@ -308,10 +311,8 @@ class Phase1Model(ABC):
                     bullet.is_used = True
 
     def transform_gun_coords(self, gun_col: int, gun_row: int):
-        vert_offset = (self.height - self.total_grid_height) // 2
-
         x = gun_col * self.cell_size
-        y = vert_offset + (gun_row * self.cell_size)
+        y = self.VERT_OFFSET + (gun_row * self.cell_size)
 
         tile_side = 16
         offset = (self.cell_size - tile_side) // 2

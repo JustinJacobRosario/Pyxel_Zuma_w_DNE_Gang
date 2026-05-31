@@ -27,13 +27,7 @@ class View:
             else:
                 sounds.play_music()
     
-
-    # ? Can we reduce the parameters here
-    def display_map(self, height, total_grid_height, row_count, 
-                    col_count, cell_size):
-        # para centered
-        vert_offset = (height - total_grid_height) // 2
-
+    def display_map(self, vert_offset, row_count, col_count, cell_size):
         for r in range(row_count):
             for c in range(col_count):
                 # grid coor to pixel
@@ -43,24 +37,16 @@ class View:
                 color = 10 if (r + c) % 2 == 0 else 11
                 pyxel.rect(x, y, cell_size, cell_size, color)
 
-    # ? Can we reduce the parameters here
-    def display_path(self, height, total_grid_height, row_count, 
+    def display_path(self, vert_offset, row_count, 
                      col_count, cell_size, path_cells):
-        # para centered
-        vert_offset = (height - total_grid_height) // 2
-
         for r, c in path_cells:
             x = c * cell_size
             y = vert_offset + (r * cell_size)
             
             pyxel.rect(x, y, cell_size, cell_size, 7)
 
-    # ? Can we reduce the parameters here
-    def display_enemies(self, height, total_grid_height, row_count, 
+    def display_enemies(self, vert_offset, row_count, 
                         col_count, cell_size, enemies: list[Enemy]):
-        # para centered
-        vert_offset = (height - total_grid_height) // 2
-
         if enemies:
             for enemy in enemies:
                 if enemy.current_health > 0:
@@ -93,11 +79,8 @@ class View:
         
         return None
 
-    def display_bullets(self, height, total_grid_height, row_count, 
+    def display_bullets(self, vert_offset, row_count, 
                         col_count, cell_size, bullets: list[Bullet]):
-        # para centered
-        vert_offset = (height - total_grid_height) // 2
-
         for bullet in bullets:
             if not bullet.is_used:
                 x = bullet.y * cell_size
