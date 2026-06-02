@@ -8,6 +8,7 @@ from enum import Enum, auto
 from enemies import Color
 from random import choice
 import json
+from math import sqrt, pow
 
 from towers import Tower
 from enemies import Enemy, OrangeEnemy, RedEnemy, BlueEnemy
@@ -75,7 +76,7 @@ class Phase1Model(ABC):
 
         self._pending_bullets: Color = choice([Color.Orange, Color.Red, Color.Yellow]) # always needs a bullet in the pending list to refer the next color sa cursor
         
-        self._displayed_bullets = []
+        self._displayed_bullets: list[Bullet] = []
         self._next_color = 7
         self._exp = 0
         self._hp = 2
@@ -370,16 +371,17 @@ class Phase2Model(Phase1Model):
     def move_bullet(self):
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
-
                 match bullet.direction:
                     case Dir.UP:
                         bullet.x -= 0.2
                         if bullet.x < -1:
                             bullet.is_used = True
+
                     case Dir.DOWN:
                         bullet.x += 0.2
-                        if self._dimensions[1] < bullet.x: # out-of-bounds
+                        if self._dimensions[1] < bullet.x:
                             bullet.is_used = True
+
                     case Dir.LEFT:
                         bullet.y -= 0.2
                         if bullet.y < -1:
@@ -393,31 +395,86 @@ class Phase3Model(Phase1Model):
     def __init__(self):
         super().__init__()
 
-    # TODO: Make it possible to shoot using the mouse
-    # TODO: Bonus -> combine it with WASD keys
+    def shoot(self, dir: Dir):
+        if self._pending_bullets:
+            color = self._pending_bullets
+            self._pending_bullets = choice([Color.Orange, Color.Red, Color.Blue])
 
-    """
-    Recall that we could use the formula y = mx + b to get the next
-    point wherein the bullet will move. 
-    """
+            x_coord = self.transformed_gun_coords[0]
+            y_coord = self.transformed_gun_coords[1]
+            bullet_coords = (x_coord, y_coord)
+
+            bullet = Bullet(x_coord, y_coord)
+            bullet.color = color
+            bullet.direction = dir
+            bullet.radius = self.cell_size // bullet.radius
+
+            if bullet.direction is Dir.UP:
+                bullet.vy = -14.4
+                bullet.vx = 0
+            elif bullet.direction is Dir.DOWN:
+                bullet.vy = 14.4
+                bullet.vx = 0
+            elif bullet.direction is Dir.RIGHT:
+                bullet.vx = 14.4
+                bullet.vy = 0
+            elif bullet.direction is Dir.LEFT:
+                bullet.vx = -14.4
+                bullet.vy = 0
+            elif bullet.direction is Dir.CURSOR:
+                mouse_coords = pyxel.mouse_x, pyxel.mouse_y
+                vx, vy = self.calculate_velocity(bullet_coords, mouse_coords)
+                bullet.vx = vx
+                bullet.vy = vy
+
+            self._displayed_bullets.append(bullet)
+
+    def calculate_velocity(self, pointA: tuple[float, float], 
+                           pointB: tuple[float, float]) -> tuple[float, float]:
+        x1, y1 = pointA
+        x2, y2 = pointB
+        dx: float = x2 - x1
+        dy: float = y2 - y1
+        norm = self.normalize(pointA, pointB)
+
+        vx = dx/norm * 14.4
+        vy = dy/norm * 14.4
+        return vx, vy
+
+    def normalize(self, pointA: tuple[float, float], 
+                  pointB: tuple[float, float]) -> float:
+        x1, y1 = pointA
+        x2, y2 = pointB
+        ans = sqrt(pow((x2 - x1), 2) + pow((y2 - y1), 2))
+
+        return ans
+
     def move_bullet(self):
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
-
                 match bullet.direction:
                     case Dir.UP:
-                        bullet.x -= 0.2
-                        if bullet.x < -1:
+                        bullet.y += bullet.vy
+                        if bullet.y < 0:
                             bullet.is_used = True
+
                     case Dir.DOWN:
-                        bullet.x += 0.2
-                        if self._dimensions[1] < bullet.x: # out-of-bounds
+                        bullet.y += bullet.vy
+                        if bullet.y > self.height:
                             bullet.is_used = True
+
                     case Dir.LEFT:
-                        bullet.y -= 0.2
-                        if bullet.y < -1:
+                        bullet.x += bullet.vx
+                        if bullet.x < 0:
                             bullet.is_used = True
+                            
                     case Dir.RIGHT:
-                        bullet.y += 0.2
-                        if self._width < bullet.x:
+                        bullet.x += bullet.vx
+                        if bullet.x > self.width:
+                            bullet.is_used = True
+
+                    case Dir.CURSOR:
+                        bullet.x += bullet.vx
+                        bullet.y += bullet.vy
+                        if bullet.x > self.width:
                             bullet.is_used = True

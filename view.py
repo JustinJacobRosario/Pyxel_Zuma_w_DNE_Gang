@@ -68,7 +68,7 @@ class View:
             return x, y
 
     def is_gun_wasd_clicked(self):
-        if pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT) or pyxel.btnp(pyxel.KEY_W):
+        if pyxel.btnp(pyxel.KEY_W):
             return Dir.UP
         elif pyxel.btnp(pyxel.KEY_S):
             return Dir.DOWN
@@ -76,22 +76,30 @@ class View:
             return Dir.LEFT
         elif pyxel.btnp(pyxel.KEY_D):
             return Dir.RIGHT
+        elif pyxel.btnp(pyxel.MOUSE_BUTTON_LEFT):
+            return Dir.CURSOR
         
         return None
 
-    def display_bullets(self, vert_offset, row_count, 
-                        col_count, cell_size, bullets: list[Bullet]):
+    # def display_bullets(self, vert_offset, row_count, 
+    #                     col_count, cell_size, bullets: list[Bullet]):
+    #     for bullet in bullets:
+    #         if not bullet.is_used:
+    #             x = bullet.y * cell_size
+    #             y = vert_offset + (bullet.x * cell_size)
+
+    #             mid_x = x + (cell_size//2)
+    #             mid_y = y + (cell_size//2)
+
+    #             # print(mid_x, mid_y)
+
+    #             pyxel.circ(mid_x, mid_y, cell_size // 5, bullet.color.value)
+
+    def display_bullets(self, vert_offset, row_count, col_count, 
+                        cell_size, bullets: list[Bullet]):
         for bullet in bullets:
             if not bullet.is_used:
-                x = bullet.y * cell_size
-                y = vert_offset + (bullet.x * cell_size)
-
-                mid_x = x + (cell_size//2)
-                mid_y = y + (cell_size//2)
-
-                # print(mid_x, mid_y)
-
-                pyxel.circ(mid_x, mid_y, cell_size // 5, bullet.color.value)
+                pyxel.circ(bullet.x, bullet.y, bullet.radius, bullet.color.value)
 
     def display_gun(self, x, y, cell_size):
         tile_side = 16

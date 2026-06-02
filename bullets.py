@@ -5,22 +5,31 @@ from abc import ABC, abstractmethod
 from player import Dir
 
 class Bullet(ABC):
-	def __init__(self, x, y):
-		self._x = x
-		self._y = y
+	def __init__(self, x: float, y: float):
+		self._x: float = x
+		self._y: float = y
 		self._radius = 5
 		self._color = Color.Orange
-		self._is_used = False
-
-		self._direction = Dir.UP
+		self._is_used: bool = False
+		self._direction: Dir = Dir.UP
+		self._vx: float = 0
+		self._vy: float = 0
 
 	@property
-	def x(self):
+	def x(self) -> float:
 		return self._x
 
 	@property
-	def y(self):
+	def y(self) -> float:
 		return self._y
+	
+	@property
+	def vx(self) -> float:
+		return self._vx
+	
+	@property
+	def vy(self) -> float:
+		return self._vy
 
 	@property
 	def radius(self):
@@ -45,6 +54,14 @@ class Bullet(ABC):
 	@y.setter
 	def y(self, value):
 		self._y = value
+
+	@vx.setter
+	def vx(self, value):
+		self._vx = value
+
+	@vy.setter
+	def vy(self, value):
+		self._vy = value
 
 	@color.setter
 	def color(self, value):
