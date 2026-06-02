@@ -10,6 +10,7 @@ class Dir(Enum):
     DOWN = auto()
     LEFT = auto()
     RIGHT = auto()
+    CURSOR = auto()
 
 class Msg(Enum):
     SHOOT = auto()
