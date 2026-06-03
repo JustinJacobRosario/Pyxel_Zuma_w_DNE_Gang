@@ -17,6 +17,7 @@ class Tower(ABC):
 
     def __init__(self, pos_col, pos_row):
         self._fire_rate: float = 0.5 # bullets / second
+        self._fire_cooldown: float = 0.0 # time since last shot
         self._col: float = float(pos_col) # defined per instance
         self._row: float = float(pos_row) # defined per instance
         self._upgraded: bool = False
@@ -32,7 +33,11 @@ class Tower(ABC):
     @property
     def fire_rate(self) -> float: # req for shooting cooldown
         return self._fire_rate
-    
+
+    @property
+    def fire_cooldown(self) -> float: # req for shooting cooldown
+        return self._fire_cooldown
+
     @property
     def exp_cost(self) -> int: # req for placing and upgrading
         return self._exp_cost
@@ -51,28 +56,24 @@ class Tower(ABC):
     
     # --
 
-    def pick_bullet_color(self) -> Color:
-        return random.choice(self._bullet_colors)
+    def pick_bullet_color(self) -> list[Color]:
+        if self._upgraded:
+            return random.sample(self._bullet_colors, 2)
+        return [random.choice(self._bullet_colors)]
 
-    def can_shoot(self, target) -> bool:
-        d_col = target.col - self._col
-        d_row = target.row - self._row
-        distance = (d_col ** 2 + d_row ** 2) ** 0.5
-        return distance <= self._range
-
-    def shoot(self, target) -> list[Bullet]: 
-        if self.upgraded:
-            colors = random.sample(self._bullet_colors, 2)
-        else:
-            colors = [self.pick_bullet_color()]
-
-        bullets = []
-        for color in colors:
-            bullet = BULLET_MAP[color](x=self._col, y=self._row, target=target)
-            bullet.is_used = False
-            bullets.append(bullet)
-
-        return bullets
+    #def shoot(self, target) -> list[Bullet]: 
+    #    if self.upgraded:
+    #        colors = random.sample(self._bullet_colors, 2)
+    #    else:
+    #        colors = [self.pick_bullet_color()]
+#
+    #    bullets = []
+    #    for color in colors:
+    #        bullet = BULLET_MAP[color](x=self._col, y=self._row, target=target)
+    #        bullet.is_used = False
+    #        bullets.append(bullet)
+#
+    #    return bullets
     
     def upgrade(self):
         if not self._upgraded:

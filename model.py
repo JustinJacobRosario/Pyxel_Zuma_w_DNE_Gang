@@ -368,6 +368,18 @@ class Phase2Model(Phase1Model):
             self._exp -= tower._upgrade_cost
             tower.upgrade()
 
+    def tick_towers(self):
+        for tower in self._tower_locs:
+            tower.fire_cooldown -= tower.fire_rate / 30 # 30 fps
+
+            if tower.fire_cooldown <= 0:
+                for color in tower.pick_bullet_color():
+                    bullet = Bullet(tower.col, tower.row, color)
+                    bullet.direction = Dir.UP  # always fires upward
+                    self._displayed_bullets.append(bullet)
+                tower.fire_cooldown = 1.0  # reset to full interval
+
+
     def move_bullet(self):
         for bullet in self._displayed_bullets:
             if not bullet.is_used:
