@@ -256,20 +256,22 @@ class Phase1Model(ABC):
             self._next_color = Color.Black.value
 
         for bullet in self._displayed_bullets:
-            b_col = bullet.y
-            b_row = bullet.x
+            if bullet.is_used:
+                continue
 
             # bullet radius in pixels
-            r1 = bullet.radius / self.cell_size 
+            r1 = bullet.radius
 
             for enemy in self._displayed_enemies:
-                e_col = enemy.col
-                e_row = enemy.row
+                enemy_x = enemy.col * self.cell_size
+                enemy_y = self.VERT_OFFSET + (enemy.row * self.cell_size)
 
                 # enemy radius in pixels
-                r2 = enemy.radius / self.cell_size 
+                r2 = enemy.radius
+
+                dist_sq = (bullet.x - enemy_x)**2 + (bullet.y - enemy_y)**2
                 
-                if (((b_col - e_col)**2 + (b_row - e_row)**2) <= (r1 + r2)**2) and (bullet.color == enemy.color):
+                if (dist_sq <= ((r1 + r2)**2)) and (bullet.color == enemy.color):
                     bullet.is_used = True
                     enemy.current_health -= 1
                     

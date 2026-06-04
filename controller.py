@@ -1,4 +1,4 @@
-from model import (Phase1Model, Phase2Model)
+from model import (Phase1Model, Phase2Model, Phase3Model)
 from player import Dir
 from dataclasses import dataclass
 from towers import Tower, RainbowTower
@@ -21,7 +21,7 @@ class PlacementState:
         self.selected_tower = None
 
 class Controller:
-    def __init__(self, model: Phase2Model, view: View):
+    def __init__(self, model: Phase3Model, view: View):
         self._model = model
         self._view = view
         self._tower_placement = PlacementState()
