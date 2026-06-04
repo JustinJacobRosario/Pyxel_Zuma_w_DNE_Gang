@@ -182,7 +182,10 @@ class View:
             x = int(tower.col * cell_size)
             y = vert_offset + int(tower.row * cell_size)
 
-            pyxel.rect(x, y, cell_size, cell_size, 10) # temp while we dont have tower sprites
+            if tower.upgraded:
+                pyxel.rect(x, y, cell_size, cell_size, 12) # upgraded tower is cyan
+            else:
+                pyxel.rect(x, y, cell_size, cell_size, 10) # temp while we dont have tower sprites
 
     def get_clicked_cell(self, height, total_grid_height, cell_size):
         # use for placing down towers

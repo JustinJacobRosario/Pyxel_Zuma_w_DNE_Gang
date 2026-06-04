@@ -48,10 +48,16 @@ class Controller:
                 self._tower_placement.select(clicked_tower)
             else:
                 cell = view.get_clicked_cell(model.height, model.total_grid_height, model.cell_size)
-                if cell and self._tower_placement.selected_tower:
+                if cell:
                     col, row = cell
-                    model.place_tower(self._tower_placement.selected_tower, col, row)
-                    self._tower_placement.reset()
+
+                    if pyxel.btn(pyxel.KEY_SHIFT):
+                        tower = next((t for t in model.towers_locs if t.col == col and t.row == row), None)
+                        if tower:
+                            model.upgrade_tower(tower)
+                    elif self._tower_placement.selected_tower:
+                        model.place_tower(self._tower_placement.selected_tower, col, row)
+                        self._tower_placement.reset()
 
             return # freezes rendering of enemies/bullets
         
