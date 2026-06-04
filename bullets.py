@@ -78,3 +78,29 @@ class Bullet(ABC):
 	@direction.setter
 	def direction(self, value):
 		self._direction = value
+
+class PiercingBullet(Bullet): # wip sniper tower bullet that can pierce through multiple enemies
+	def __init__(self, x: float, y: float):
+		super().__init__(x, y)
+		self._piercing_power = 3
+
+	@property
+	def piercing_power(self):
+		return self._piercing_power
+
+	@piercing_power.setter
+	def piercing_power(self, value):
+		self._piercing_power = value
+
+class SplitterBullet(Bullet): # wip splitter tower bullet that splits into 2 additional bullets after traveling a certain distance
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self._has_split = False # only allows split once
+
+    @property
+    def has_split(self):
+        return self._has_split
+
+    @has_split.setter
+    def has_split(self, value):
+        self._has_split = value

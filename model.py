@@ -10,9 +10,9 @@ from random import choice
 import json
 from math import sqrt, pow
 
-from towers import Tower
+from towers import Tower, SniperTower, SplitterTower
 from enemies import Enemy, OrangeEnemy, RedEnemy, BlueEnemy
-from bullets import Bullet
+from bullets import Bullet, PiercingBullet, SplitterBullet
 from player import Dir
 
 direction_velocities = {
