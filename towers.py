@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from bullets import Bullet
 from enemies import Color
+from player import Dir
 import random
 
 # BULLET_MAP = {
@@ -21,6 +22,7 @@ class Tower(ABC):
         self._col: float = float(pos_col) # defined per instance
         self._row: float = float(pos_row) # defined per instance
         self._upgraded: bool = False
+        self._direction: Dir = Dir.UP
 	
     @property
     def col(self) -> float: # req for pos drawing and range checking
@@ -57,6 +59,14 @@ class Tower(ABC):
     @property
     def upgraded(self) -> bool: # req for upgrading and drawing
         return self._upgraded
+    
+    @property
+    def direction(self) -> Dir:
+        return self._direction
+    
+    @direction.setter
+    def direction(self, value: Dir):
+        self._direction = value
     
     # --
 

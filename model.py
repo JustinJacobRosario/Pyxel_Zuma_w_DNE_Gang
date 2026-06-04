@@ -15,6 +15,13 @@ from enemies import Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet
 from player import Dir
 
+direction_velocities = {
+    Dir.UP: (0, -14.4),
+    Dir.DOWN: (0, 14.4),
+    Dir.LEFT: (-14.4, 0),
+    Dir.RIGHT: (14.4, 0)
+}
+
 class Phase1Model(ABC):
     '''
     Base Model
@@ -378,13 +385,14 @@ class Phase2Model(Phase1Model):
 
                 tower_x = tower.col * self.cell_size + (self.cell_size // 2)
                 tower_y = self.VERT_OFFSET + (tower.row * self.cell_size) + (self.cell_size // 2)
+                vx, vy = direction_velocities[tower.direction]
 
                 for i, color in enumerate(tower.pick_bullet_color()):
                     bullet = Bullet(tower_x, tower_y)
                     bullet.color = color
-                    bullet.direction = Dir.UP  # always fires upward
-                    bullet.vy = -14.4
-                    bullet.vx = 0.0
+                    bullet.direction = tower.direction
+                    bullet.vy = vy
+                    bullet.vx = vx
                     bullet.y += i * (self.cell_size // 2) # offset for upgraded tower that shoots 2
                     bullet.radius = self.cell_size // 4
                     self._displayed_bullets.append(bullet)
@@ -432,23 +440,13 @@ class Phase3Model(Phase2Model):
             bullet.direction = dir
             bullet.radius = self.cell_size // bullet.radius
 
-            if bullet.direction is Dir.UP:
-                bullet.vy = -14.4
-                bullet.vx = 0
-            elif bullet.direction is Dir.DOWN:
-                bullet.vy = 14.4
-                bullet.vx = 0
-            elif bullet.direction is Dir.RIGHT:
-                bullet.vx = 14.4
-                bullet.vy = 0
-            elif bullet.direction is Dir.LEFT:
-                bullet.vx = -14.4
-                bullet.vy = 0
-            elif bullet.direction is Dir.CURSOR:
+            if bullet.direction is Dir.CURSOR:
                 mouse_coords = pyxel.mouse_x, pyxel.mouse_y
                 vx, vy = self.calculate_velocity(bullet_coords, mouse_coords)
                 bullet.vx = vx
                 bullet.vy = vy
+            else:
+                bullet.vx, bullet.vy = direction_velocities[bullet.direction]                
 
             self._displayed_bullets.append(bullet)
 
