@@ -263,8 +263,8 @@ class Phase1Model(ABC):
             r1 = bullet.radius
 
             for enemy in self._displayed_enemies:
-                enemy_x = enemy.col * self.cell_size
-                enemy_y = self.VERT_OFFSET + (enemy.row * self.cell_size)
+                enemy_x = enemy.col * self.cell_size + (self.cell_size // 2)
+                enemy_y = self.VERT_OFFSET + (enemy.row * self.cell_size) + (self.cell_size // 2)
 
                 # enemy radius in pixels
                 r2 = enemy.radius
