@@ -37,6 +37,10 @@ class Tower(ABC):
     @property
     def fire_cooldown(self) -> float: # req for shooting cooldown
         return self._fire_cooldown
+    
+    @fire_cooldown.setter
+    def fire_cooldown(self, value: float):
+        self._fire_cooldown = value
 
     @property
     def exp_cost(self) -> int: # req for placing and upgrading

@@ -59,6 +59,7 @@ class Controller:
             if not self._model.is_game_over:
                 model.inc_tick()
                 model.move_bullet()
+                model.tick_towers()
                 is_shot = model.process_shot()
                 if is_shot:
                     sounds.shot_enemy_sound()
@@ -112,6 +113,12 @@ class Controller:
             model.transformed_gun_coords[1],
             model.cell_size
         )
+
+        view.display_placed_towers(
+            model.height, 
+            model.total_grid_height, 
+            model.cell_size, 
+            model.towers_locs)
 
         view.display_bullets(
             model.VERT_OFFSET, 

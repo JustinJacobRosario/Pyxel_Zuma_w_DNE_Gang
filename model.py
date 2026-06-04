@@ -375,9 +375,17 @@ class Phase2Model(Phase1Model):
             tower.fire_cooldown -= tower.fire_rate / 30 # 30 fps
 
             if tower.fire_cooldown <= 0:
+
+                tower_x = tower.col * self.cell_size + (self.cell_size // 2)
+                tower_y = self.VERT_OFFSET + (tower.row * self.cell_size) + (self.cell_size // 2)
+
                 for color in tower.pick_bullet_color():
-                    bullet = Bullet(tower.col, tower.row, color)
+                    bullet = Bullet(tower_x, tower_y)
+                    bullet.color = color
                     bullet.direction = Dir.UP  # always fires upward
+                    bullet.vy = -14.4
+                    bullet.vx = 0.0
+                    bullet.radius = self.cell_size // 4
                     self._displayed_bullets.append(bullet)
                 tower.fire_cooldown = 1.0  # reset to full interval
 
