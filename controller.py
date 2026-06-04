@@ -1,4 +1,5 @@
 from model import (Phase1Model, Phase2Model, Phase3Model)
+import model
 from player import Dir
 from dataclasses import dataclass
 from towers import Tower, RainbowTower
@@ -77,8 +78,16 @@ class Controller:
                 wasd_val = view.is_gun_wasd_clicked()
 
                 if wasd_val is not None:
-                    sounds.shoot_sound()
-                    model.shoot(wasd_val)
+                    vert_offset = (model.height - model.total_grid_height) // 2
+                    hovered_col = pyxel.mouse_x // model.cell_size
+                    hovered_row = (pyxel.mouse_y - vert_offset) // model.cell_size
+                    hovered_tower = next((t for t in model.towers_locs if t.col == hovered_col and t.row == hovered_row), None)
+
+                    if hovered_tower and pyxel.btn(pyxel.KEY_SHIFT):
+                        hovered_tower.direction = wasd_val
+                    else:
+                        sounds.shoot_sound()
+                        model.shoot(wasd_val)
 
             model.delete_enemy_out_of_bounds()
             model.check_if_next_round()
