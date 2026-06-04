@@ -403,7 +403,7 @@ class Phase2Model(Phase1Model):
                         if self._width < bullet.x:
                             bullet.is_used = True
 
-class Phase3Model(Phase1Model):
+class Phase3Model(Phase2Model):
     def __init__(self):
         super().__init__()
 
