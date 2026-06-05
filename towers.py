@@ -122,6 +122,7 @@ class SniperTower(Tower):
         super().__init__(pos_col, pos_row)
         self._fire_rate = 0.2
 
+
 class SplitterTower(Tower):
     _exp_cost = 1 # !TESTING COST ONLY
     _upgrade_cost = 6
@@ -131,3 +132,21 @@ class SplitterTower(Tower):
     def __init__(self, pos_col, pos_row):
         super().__init__(pos_col, pos_row)
         self._fire_rate = 0.2
+
+class MedicTower(Tower):
+    _exp_cost = 1 # !TESTING COST ONLY
+    _upgrade_cost = 10
+    _range = 0
+    _bullet_colors = []
+
+    def __init__(self, pos_col, pos_row):
+        super().__init__(pos_col, pos_row)
+        self._fire_rate = 0.0
+        self._heal_amount = 1
+
+    @property
+    def heal_amount(self):
+        return self._heal_amount
+    
+    def on_upgrade(self):
+        self._heal_amount = 2
