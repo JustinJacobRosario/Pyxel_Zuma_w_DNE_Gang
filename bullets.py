@@ -96,6 +96,7 @@ class SplitterBullet(Bullet): # wip splitter tower bullet that splits into 2 add
     def __init__(self, x, y):
         super().__init__(x, y)
         self._has_split = False # only allows split once
+        self._is_upgraded = False # determined if tower who fired is upgraded or not
 
     @property
     def has_split(self):
@@ -104,3 +105,11 @@ class SplitterBullet(Bullet): # wip splitter tower bullet that splits into 2 add
     @has_split.setter
     def has_split(self, value):
         self._has_split = value
+
+    @property
+    def is_upgraded(self):
+        return self._is_upgraded
+	
+    @is_upgraded.setter
+    def is_upgraded(self, value):
+        self._is_upgraded = value

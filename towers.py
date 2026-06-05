@@ -106,21 +106,21 @@ class RainbowTower(Tower):
         super().__init__(pos_col, pos_row)
 
 class SniperTower(Tower):
-    _exp_cost = 8
+    _exp_cost = 1
     _upgrade_cost = 8
     _range = 10.0
     _bullet_colors = [Color.Orange, Color.Red, Color.Blue]
 
     def __init__(self, pos_col, pos_row):
         super().__init__(pos_col, pos_row)
-        self._fire_rate = 0.3
+        self._fire_rate = 0.2
 
 class SplitterTower(Tower):
-    _exp_cost = 6
+    _exp_cost = 1
     _upgrade_cost = 6
     _range = 3.0
     _bullet_colors = [Color.Orange, Color.Red, Color.Blue]
 
     def __init__(self, pos_col, pos_row):
         super().__init__(pos_col, pos_row)
-        self._fire_rate = 1.5
+        self._fire_rate = 0.2

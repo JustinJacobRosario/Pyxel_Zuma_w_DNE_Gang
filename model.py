@@ -1,6 +1,7 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
+import math
 from random import Random, choice
 import pyxel
 from typing import Protocol
@@ -262,6 +263,8 @@ class Phase1Model(ABC):
         else:
             self._next_color = Color.Black.value
 
+        new_bullets = [] # for usage with splitter bullet
+
         for bullet in self._displayed_bullets:
             if bullet.is_used:
                 continue
@@ -275,15 +278,42 @@ class Phase1Model(ABC):
 
                 # enemy radius in pixels
                 r2 = enemy.radius
-
                 dist_sq = (bullet.x - enemy_x)**2 + (bullet.y - enemy_y)**2
                 
-                if (dist_sq <= ((r1 + r2)**2)) and (bullet.color == enemy.color):
-                    bullet.is_used = True
+                if dist_sq > ((r1 + r2)**2):
+                    continue
+
+                if bullet.color == enemy.color:
                     enemy.current_health -= 1
-                    
                     self._exp += 1
-                    return True
+
+                    if isinstance(bullet, PiercingBullet):
+                        bullet.piercing_power -= 1
+                        if bullet.piercing_power <= 0:
+                            bullet.is_used = True
+                    else:
+                        bullet.is_used = True
+
+                elif isinstance(bullet, SplitterBullet) and not bullet.has_split:
+                    bullet.has_split = True
+                    bullet.is_used = True
+                    speed = math.sqrt(bullet.vx**2 + bullet.vy**2)
+                    base_angle = math.atan2(bullet.vy, bullet.vx)
+                    
+                    angles = [-30, 0, 30] if bullet.is_upgraded else [-20, 20]
+                    for deg in angles:
+                        angle = base_angle + math.radians(deg)
+                        new_bullet = SplitterBullet(bullet.x, bullet.y)
+                        new_bullet.color = bullet.color
+                        new_bullet.direction = Dir.CURSOR
+                        new_bullet.vx = speed * math.cos(angle)
+                        new_bullet.vy = speed * math.sin(angle)
+                        new_bullet.radius = bullet.radius // 2
+                        new_bullet.has_split = True # prevent infinite splitting
+                        new_bullets.append(new_bullet)
+                    break
+        
+        self._displayed_bullets.extend(new_bullets)
         return False
 
     def shoot(self, dir: Dir):
@@ -350,7 +380,7 @@ class Phase2Model(Phase1Model):
         self._gun_coords = (7, 4)
         self._rounds = self._data["enemies"]
         self._enemies = [
-            [(choice([OrangeEnemy(), RedEnemy()])) for _ in range(5)] for _ in range(self.rounds)]
+            [(choice([OrangeEnemy()])) for _ in range(5)] for _ in range(self.rounds)]
         self._hp = self._data["lives"]
 
     @property
@@ -388,7 +418,14 @@ class Phase2Model(Phase1Model):
                 vx, vy = direction_velocities[tower.direction]
 
                 for i, color in enumerate(tower.pick_bullet_color()):
-                    bullet = Bullet(tower_x, tower_y)
+                    if isinstance(tower, SniperTower):
+                        bullet = PiercingBullet(tower_x, tower_y)
+                    elif isinstance(tower, SplitterTower):
+                        bullet = SplitterBullet(tower_x, tower_y)
+                        bullet.is_upgraded = tower.upgraded # pass upgrade status from tower to bullet
+                    else:
+                        bullet = Bullet(tower_x, tower_y)
+
                     bullet.color = color
                     bullet.direction = tower.direction
                     bullet.vy = vy

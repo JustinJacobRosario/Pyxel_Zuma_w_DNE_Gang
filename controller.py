@@ -2,12 +2,12 @@ from model import (Phase1Model, Phase2Model, Phase3Model)
 import model
 from player import Dir
 from dataclasses import dataclass
-from towers import Tower, RainbowTower
+from towers import Tower, RainbowTower, SniperTower, SplitterTower
 from view import View
 import pyxel
 import sounds
 
-AVAILABLE_TOWERS = [RainbowTower]
+AVAILABLE_TOWERS = [RainbowTower, SniperTower, SplitterTower]
 
 @dataclass
 class PlacementState:
@@ -84,7 +84,8 @@ class Controller:
                     hovered_tower = next((t for t in model.towers_locs if t.col == hovered_col and t.row == hovered_row), None)
 
                     if hovered_tower and pyxel.btn(pyxel.KEY_SHIFT):
-                        hovered_tower.direction = wasd_val
+                        if wasd_val != Dir.CURSOR: # guard check to prevent setting tower dir to cursor
+                            hovered_tower.direction = wasd_val
                     else:
                         sounds.shoot_sound()
                         model.shoot(wasd_val)
