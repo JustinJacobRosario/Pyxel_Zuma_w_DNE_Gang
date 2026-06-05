@@ -71,9 +71,10 @@ class Tower(ABC):
     # --
 
     def pick_bullet_color(self) -> list[Color]:
-        if self._upgraded:
-            return random.sample(self._bullet_colors, 2)
         return [random.choice(self._bullet_colors)]
+    
+    def on_upgrade(self):
+        pass
 
     #def shoot(self, target) -> list[Bullet]: 
     #    if self.upgraded:
@@ -92,6 +93,7 @@ class Tower(ABC):
     def upgrade(self):
         if not self._upgraded:
             self._upgraded = True
+            self.on_upgrade()
             return True
         return False
 
@@ -105,8 +107,13 @@ class RainbowTower(Tower):
     def __init__(self, pos_col, pos_row):
         super().__init__(pos_col, pos_row)
 
+    def pick_bullet_color(self) -> list[Color]:
+        if self._upgraded:
+            return random.sample(self._bullet_colors, 2)  # 2 bullets only when upgraded
+        return [random.choice(self._bullet_colors)]
+
 class SniperTower(Tower):
-    _exp_cost = 1
+    _exp_cost = 1 # !TESTING COST ONLY
     _upgrade_cost = 8
     _range = 10.0
     _bullet_colors = [Color.Orange, Color.Red, Color.Blue]
@@ -116,7 +123,7 @@ class SniperTower(Tower):
         self._fire_rate = 0.2
 
 class SplitterTower(Tower):
-    _exp_cost = 1
+    _exp_cost = 1 # !TESTING COST ONLY
     _upgrade_cost = 6
     _range = 3.0
     _bullet_colors = [Color.Orange, Color.Red, Color.Blue]

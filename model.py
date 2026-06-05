@@ -86,7 +86,7 @@ class Phase1Model(ABC):
         
         self._displayed_bullets: list[Bullet] = []
         self._next_color = 7
-        self._exp = 0
+        self._exp = 10 # !TESTING VALUE ONLY
         self._hp = 2
 
         self._data = self.fetch_json_data()
@@ -430,7 +430,12 @@ class Phase2Model(Phase1Model):
                     bullet.direction = tower.direction
                     bullet.vy = vy
                     bullet.vx = vx
-                    bullet.y += i * (self.cell_size // 2) # offset for upgraded tower that shoots 2
+
+                    if tower.direction in [Dir.UP, Dir.DOWN]: # offset for upgraded tower that shoots 2
+                        bullet.y += i * (self.cell_size // 2)
+                    else:
+                        bullet.x += i * (self.cell_size // 2)
+
                     bullet.radius = self.cell_size // 4
                     self._displayed_bullets.append(bullet)
                 tower.fire_cooldown = 1.0  # reset to full interval
