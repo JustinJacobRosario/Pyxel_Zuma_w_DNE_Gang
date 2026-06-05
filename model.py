@@ -11,7 +11,7 @@ from random import choice
 import json
 from math import sqrt, pow
 
-from towers import Tower, SniperTower, SplitterTower
+from towers import Tower, SniperTower, SplitterTower, MedicTower
 from enemies import Enemy, OrangeEnemy, RedEnemy, BlueEnemy
 from bullets import Bullet, PiercingBullet, SplitterBullet
 from player import Dir
@@ -86,8 +86,9 @@ class Phase1Model(ABC):
         
         self._displayed_bullets: list[Bullet] = []
         self._next_color = 7
-        self._exp = 10 # !TESTING VALUE ONLY
+        self._exp = 0
         self._hp = 2
+        self._max_hp = self._hp # prevent healing over the max
 
         self._data = self.fetch_json_data()
 
@@ -197,6 +198,7 @@ class Phase1Model(ABC):
 
     def check_if_next_round(self):
         if (len(self._enemies[self._current_round - 1]) == 0) and (len(self._displayed_enemies) == 0) and ((self._current_round) < self._rounds):
+                self.heal_towers() # trigger medic towers between rounds
                 self._current_round += 1
                 self._waiting_for_start = True # pause between rounds
 
@@ -248,6 +250,11 @@ class Phase1Model(ABC):
         self._displayed_enemies = [e for e in self._displayed_enemies if e.current_health > 0]
         self._displayed_bullets = [b for b in self._displayed_bullets if not b.is_used]
     
+    def heal_towers(self):
+        for tower in self._tower_locs:
+            if isinstance(tower, MedicTower):
+                self._hp = min(self._hp + tower.heal_amount, self._max_hp)
+
     # * Must check if a bug may occur in process_shot
     # Implement spatial hash
     def process_shot(self):

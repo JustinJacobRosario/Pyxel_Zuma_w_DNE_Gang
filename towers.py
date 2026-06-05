@@ -98,7 +98,7 @@ class Tower(ABC):
         return False
 
 # phase 2 tower: shoots upwards, cost 5	
-class RainbowTower(Tower): 
+class BasicTower(Tower): 
     _exp_cost = 5
     _upgrade_cost = 5
     _range = 5.0
@@ -113,7 +113,7 @@ class RainbowTower(Tower):
         return [random.choice(self._bullet_colors)]
 
 class SniperTower(Tower):
-    _exp_cost = 1 # !TESTING COST ONLY
+    _exp_cost = 8
     _upgrade_cost = 8
     _range = 10.0
     _bullet_colors = [Color.Orange, Color.Red, Color.Blue]
@@ -124,7 +124,7 @@ class SniperTower(Tower):
 
 
 class SplitterTower(Tower):
-    _exp_cost = 1 # !TESTING COST ONLY
+    _exp_cost = 6
     _upgrade_cost = 6
     _range = 3.0
     _bullet_colors = [Color.Orange, Color.Red, Color.Blue]
@@ -134,7 +134,7 @@ class SplitterTower(Tower):
         self._fire_rate = 0.2
 
 class MedicTower(Tower):
-    _exp_cost = 1 # !TESTING COST ONLY
+    _exp_cost = 10
     _upgrade_cost = 10
     _range = 0
     _bullet_colors = []
@@ -150,3 +150,6 @@ class MedicTower(Tower):
     
     def on_upgrade(self):
         self._heal_amount = 2
+
+    def pick_bullet_color(self) -> list[Color]:
+        return []

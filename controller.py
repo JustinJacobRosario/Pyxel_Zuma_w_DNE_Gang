@@ -2,12 +2,12 @@ from model import (Phase1Model, Phase2Model, Phase3Model)
 import model
 from player import Dir
 from dataclasses import dataclass
-from towers import Tower, RainbowTower, SniperTower, SplitterTower
+from towers import Tower, BasicTower, SniperTower, SplitterTower, MedicTower
 from view import View
 import pyxel
 import sounds
 
-AVAILABLE_TOWERS = [RainbowTower, SniperTower, SplitterTower]
+AVAILABLE_TOWERS = [BasicTower, SniperTower, SplitterTower, MedicTower]
 
 @dataclass
 class PlacementState:

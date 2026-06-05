@@ -157,7 +157,7 @@ class View:
             pyxel.rectb(btn_x, btn_y, btn_size, btn_size, border_color) 
             pyxel.rect(btn_x + 1, btn_y + 1, btn_size - 2, btn_size - 2, 5)
 
-            pyxel.text(btn_x + 4, btn_y + 6, tower_class.__name__[:3], 7, font) # tower name
+            pyxel.text(btn_x + 4, btn_y + 6, tower_class.__name__[:5], 7, font) # tower name
             pyxel.text(btn_x + 4, btn_y + 25, f"{tower_class._exp_cost} EXP", 10, font) # tower cost
 
     def get_tower_selection(self, width, height, tower_options: List[type[Tower]], cell_size):
